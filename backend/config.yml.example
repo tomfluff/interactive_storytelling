@@ -1,7 +1,7 @@
-api:
-  openai_key: YOUR_OPENAI_KEY
-  openai_org: YOUR_OPENAI_ORG
-  openai_model: YOUR_OPENAI_MODEL
+openai:
+  key: YOUR_OPENAI_KEY
+  org: YOUR_OPENAI_ORG
+  model: gpt-3.5-turbo
 
 app:
   debug: true
@@ -12,4 +12,5 @@ server:
   log_location: "logs/app.log"
 
 llm:
+  type: openai
   log_location: "logs/llm.log"
