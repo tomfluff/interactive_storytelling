@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "@material-ui/core": "^4.12.4",
-    "@types/node": "^20.10.4",
-    "@types/react": "^17.0.73",
-    "@types/react-dom": "^18.2.17"
-  }
-}
