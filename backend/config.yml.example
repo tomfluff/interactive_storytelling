@@ -1,0 +1,15 @@
+api:
+  openai_key: YOUR_OPENAI_KEY
+  openai_org: YOUR_OPENAI_ORG
+  openai_model: YOUR_OPENAI_MODEL
+
+app:
+  debug: true
+  logger: true
+  image_generation: true
+
+server:
+  log_location: "logs/app.log"
+
+llm:
+  log_location: "logs/llm.log"
