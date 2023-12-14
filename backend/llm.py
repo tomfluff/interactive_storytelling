@@ -3,18 +3,18 @@ from openai import OpenAI
 
 class OpenAILLM:
     def __init__(self, config) -> None:
-        self.client = OpenAI(api_key=config['openai/key'],organization=config['openai/org'])
+        self.client = OpenAI(api_key=config['openai']['key'],organization=config['openai']['org'])
 
     def __call__(self):
         return self.client
 
 class LLMStoryteller:
     def __init__(self, config) -> None:
-        if config['llm/type'] == 'openai':
+        if config['llm']['type'] == 'openai':
             self.llm = OpenAILLM(config)
-            self.model = config['openai/model']
+            self.model = config['openai']['model']
         else:
-            raise NotImplementedError(f"LLM type {config['llm/type']} is not implemented")
+            raise NotImplementedError(f"LLM type {config['llm']['type']} is not implemented")
 
     def hello_world(self):
         response = self.llm().chat.completions.create(
@@ -24,7 +24,7 @@ class LLMStoryteller:
                 {"role": "user", "content": "Hello, who are you?"},
             ]
         )
-        return response.choices[0].text
+        return response.choices[0].message.content
 
     def generate_story(self, prompt):
         # Send LLM request to generate a story based on the given prompt
