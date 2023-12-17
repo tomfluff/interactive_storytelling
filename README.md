@@ -104,3 +104,4 @@ Based on [this image](https://www.123playandlearn.com/uploads/4/3/8/5/4385398/59
 
 ## Notes
 
+* [Drawing Character Animation](https://github.com/facebookresearch/AnimatedDrawings#amateur-drawings-dataset), a Meta algorithm to animation drawings.
