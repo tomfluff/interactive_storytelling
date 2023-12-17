@@ -1,6 +1,8 @@
 # App
 config.yml
 test.py
+*.log
+drawing.*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

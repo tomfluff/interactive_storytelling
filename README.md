@@ -1,5 +1,5 @@
 # Interactive Storytelling
-*(This isa project for the Multimedia Interfaces course at the University of Tokyo.)*
+*(This is a project for the Multimedia Interfaces class at the University of Tokyo.)*
 
 ## About
 `MyStoryKnight` is a web application that allows users to create and experience interactive stories. The application is built using the [Flask](https://flask.palletsprojects.com/en/1.1.x/) framework for Python. As well as the [React](https://reactjs.org/) JavaScript library with [TypeScript](https://www.typescriptlang.org/).
@@ -37,10 +37,70 @@ Our contributions are as follows:
 
 ---
 
-## Notes
+## Implementation
 
-### Configuration
-Copy the config file and add your own details.
+### Configuration (setup)
+Copy the `config.yml.example` file and add your own details.
 1. `cd backend`
 2. `cp config.yml.example config.yml`
 3. Replace with your details (API key, etc.).
+
+
+### Backend
+Using [Flask](https://flask.palletsprojects.com/en/1.1.x/).
+
+    backend/
+    │   └── logs/
+    ├── config.yml
+    ├── llm.py
+    └── app.py
+
+- `config.yml` contains the configuration for the application.
+- `llm.py` contains the code for the LLM.
+- `app.py` contains the code for the Flask application.
+
+#### Using LLM
+- `send_llm_request()` sends a request to the LLM and returns the response, needs `request` item with the messages. (see example in `hello_world()` function in `llm.py`)
+- `send_vision_request()` sends a request to the Vision LLM and returns the response, needs `request` item with the content. (see example in `understand_drawing()` function in `llm.py`)
+
+#### LLM Examples
+
+##### Drawing analysis
+Based on [this image](https://www.123playandlearn.com/uploads/4/3/8/5/4385398/5966588_orig.jpg), the generated analysis is as follows:
+```json
+{
+    "description": "A drawing of a child dressed as a superhero with text above.",
+    "items": [
+        "child",
+        "superhero costume",
+        "text",
+        "logo"
+    ],
+    "colors": [
+        {
+            "color": "purple",
+            "usage": "hair and cape of the superhero"
+        },
+        {
+            "color": "red",
+            "usage": "superhero bodysuit"
+        },
+        {
+            "color": "yellow",
+            "usage": "superhero gloves and belt"
+        },
+        {
+            "color": "green",
+            "usage": "superhero boots and pants"
+        }
+    ],
+    "relationships": {
+        "child": "wearing a superhero costume",
+        "text": "above the child"
+    },
+    "story": "In a colorful town where every day is an adventure, there lived a joyful young hero known as Super Happy Kid. With a smile as bright as the sun and a heart full of courage, Super Happy Kid spent each day using his imagination to turn ordinary moments into extraordinary ones. Whether playing in the park or helping friends, Super Happy Kid always brought laughter and happiness to everyone around."
+}
+```
+
+## Notes
+
