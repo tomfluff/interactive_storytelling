@@ -1,7 +1,8 @@
 openai:
   key: YOUR_OPENAI_KEY
   org: YOUR_OPENAI_ORG
-  model: gpt-3.5-turbo
+  model: gpt-4-1106-preview
+  vmodel: gpt-4-vision-preview
 
 app:
   debug: true

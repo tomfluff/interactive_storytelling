@@ -1,12 +1,16 @@
 import json
 import logging
 import yaml
+import os
 
 from openai import OpenAI
 
 # General setting up
 with open("config.yml", "r") as stream:
     config = yaml.safe_load(stream)
+
+# Create log file and all path folders if not exists
+os.makedirs(os.path.dirname(config["llm"]["log_location"]), exist_ok=True)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG if config["app"]["debug"] else logging.INFO)
@@ -55,6 +59,14 @@ class LLMStoryteller:
 
     def generate_action_choices(self, story):
         # Choose an action based on the generated story
+        pass
+
+    def inquire_drawing(self, data):
+        # Send LLM request to inquire about the drawing (based on the data)
+        pass
+
+    def analyze_feedback(self, feedback):
+        # Analyze the user feedback (positive or negative, etc.)
         pass
 
     def understand_drawing(self, drawing, json_content=True):
