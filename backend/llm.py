@@ -69,6 +69,26 @@ class LLMStoryteller:
         # Analyze the user feedback (positive or negative, etc.)
         pass
 
+    def calc_story_part_score(self, story_part):
+        # Get the score of a story part
+        pass
+
+    def __get_least_frequenct_word(self, story_part):
+        # Get the least frequent word in the story part
+        pass
+
+    def __get_diff_story_elements(self, story_part):
+        # Get the different story elements in the story part
+        pass
+
+    def __get_named_story_elements(self, story_part):
+        # Get the named story elements in the story part
+        pass
+
+    def __check_ending_condition(self):
+        # Check if the story should be finished
+        pass
+
     def understand_drawing(self, drawing, json_content=True):
         try:
             messages = [
