@@ -12,9 +12,9 @@ Prior work considered interaction with an existing character [10], enhanced coll
 We propose MyStoryKnight, a creativity driven personalized storytelling by and for children using the power of generative AI. Using multi-modal input from the user, in the form of drawings and textual information, the story unfolds as an adventure that the user experiences alongside the avatar it created. Making choices about actions, events and so on for a personalized experience.
 
 Our contributions are as follows:
-1. Multi-modal input in the form of verbal information and drawings.
-1. LLM hallucinations to generate an adventure-type story with user navigation.
-1. Save-state to try different choices and create story branches. (maybe)
+1. Input in the form of drawings (and maybe more).
+2. LLM hallucinations to generate an adventure-type story with user navigation.
+3. Save-state to try different choices and create story branches. (maybe)
 
 ---
 
