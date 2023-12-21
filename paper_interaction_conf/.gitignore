@@ -2,3 +2,6 @@
 *.fdb_latexmk
 *.fls
 *.log
+*.dvi
+*.synctex.gz
+.vscode/
