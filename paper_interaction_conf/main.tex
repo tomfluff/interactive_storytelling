@@ -9,6 +9,7 @@
 \usepackage{graphicx}
 \usepackage{latexsym}
 
+
 \def\Underline{\setbox0\hbox\bgroup\let\\\endUnderline}
 \def\endUnderline{\vphantom{y}\egroup\smash{\underline{\box0}}\\}
 \def\|{\verb|}
@@ -44,6 +45,7 @@
 
 \author{Takeo Igarashi}{UTokyo}[]
 
+
 \begin{abstract}
     Storytelling is a valuable tradition that plays a crucial role in child development, fostering creativity and a sense of agency. However, many children often consume stories passively, missing out on the opportunity to participate in the creative process. To address this, we propose a storytelling system that creates adventure-type stories with multiple branches that users can explore. We generate these interactive stories using a character drawing as input, with visual features extraction using GPT-4. By leveraging LLM hallucinations, we generate interactive stories using user feedback as a prompt. Finally, we refine the quality of the generated story through a complexity analysis algorithm. We believe that the use of a drawing as input further improves the engagement in the story and characters.
 \end{abstract}
@@ -60,7 +62,14 @@ One effective way to promote creativity is through storytelling, a popular activ
 
 Collaborative storytelling has been shown to be an effective way of building and strengthening relationships \cite{8:ShakeriND21}, also playing an important role in parent-child bonding \cite{12:ZhangXWYRWYWL22}. Interactive stories stimulate children's thinking and imagination \cite{11:LimaGV20}, and help children make sense of their world through shared experiences \cite{9:RyokaiC99}. Despite these benefits, many parents do not regularly engage in interactive storytelling with their children due to limited availability, time, or energy [7, 12].
 
-To address this, we propose \textbf{MyStoryKnight}, a character drawing driven storytelling system that uses LLM hallucinations to generate an adventure-type story with user agency and navigation. Our system uses drawings of characters as input, and generates an unfolding story that the user can navigate through based on their choices. Using a complexity analysis algorithm, we guide the LLM hallucinations to generate a coherent and consistent story. Resulting in a story that is both engaging and easy to follow.
+To address this, we propose \textbf{MyStoryKnight}, a character drawing driven storytelling system that uses LLM hallucinations to generate an adventure-type story with user agency and navigation. Figure \ref{fig:system-overview} shows an overview of our system. Our system uses drawings of characters as input, and generates an unfolding story that the user can navigate through based on their choices. Using a complexity analysis algorithm, we guide the LLM hallucinations to generate a coherent and consistent story. Resulting in a story that is both engaging and easy to follow.
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/1920x720px.png}
+    \caption{MyStoryKnight system overview.}
+    \label{fig:system-overview}
+\end{figure*}
 
 Our contributions are:
 \begin{itemize}
