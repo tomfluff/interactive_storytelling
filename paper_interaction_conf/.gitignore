@@ -4,4 +4,5 @@
 *.log
 *.dvi
 *.synctex.gz
+*.blg
 .vscode/

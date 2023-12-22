@@ -1,0 +1,85 @@
+%%
+%% Interaction 2024 Technical Report Submission
+%% V1.0 (2023/12/22)
+%% 
+
+\documentclass[submit,techrep,english]{ipsj}
+
+
+\usepackage{graphicx}
+\usepackage{latexsym}
+
+\def\Underline{\setbox0\hbox\bgroup\let\\\endUnderline}
+\def\endUnderline{\vphantom{y}\egroup\smash{\underline{\box0}}\\}
+\def\|{\verb|}
+
+\setcounter{volume}{64}%vol53=2012
+\setcounter{number}{10}
+\setcounter{page}{1}
+
+% インタラクション特有の設定。印刷工程で柱・ノンブルの埋め込みを行う。
+\makeatletter
+\pagestyle{empty}
+\def\@oddhead{}%
+\def\@evenhead{}%
+\def\ps@IPSJTITLEheadings{}
+\makeatother
+
+
+\begin{document}
+
+
+\title{MyStoryKnight: A Character-drawing Driven Storytelling System Using LLM Hallucinations}
+
+\affiliate{LU}{Lund University}
+\affiliate{TUD}{Technical University of Denmark}
+\affiliate{HRI}{Honda Research Institute Japan}
+\affiliate{UTokyo}{The University of Tokyo}
+\paffiliate{PUTokyo}{The University of Tokyo}
+
+\author{Yotam Sechayk}{UTokyo}[sechayk-yotam@g.ecc.u-tokyo.ac.jp]
+\author{Isa A. Randsalu}{LU,PUTokyo}[randsalu-isa071@g.ecc.u-tokyo.ac.jp]
+\author{Gabriela A. Penarska}{TUD,PUTokyo}[gabriela-penarska@g.ecc.u-tokyo.ac.jp]
+\author{Christian Arzate Cruz}{HRI}[]
+\author{Takeo Igarashi}{UTokyo}[]
+
+\begin{abstract}
+    Test.
+\end{abstract}
+
+\maketitle
+
+%1
+\section{Introduction}
+
+%2
+\section{Related Work}
+
+%3
+\section{System Overview}
+
+%4
+\section{Implementation}
+
+%5
+\section{Evaluation}
+
+%6
+\section{Discussion}
+
+%7
+\section{Conclusion}
+
+% Acknowledgment
+\begin{acknowledgment}
+    Test.
+\end{acknowledgment}
+
+% Bibliography
+\bibliographystyle{ipsjsort-e}
+\bibliography{references}
+
+% Appendix
+\appendix
+
+\end{document}
