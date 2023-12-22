@@ -1,3 +1,39 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{10}
+
+\bibitem{13:abs-2011-04242}
+Burtenshaw, B.: {AI} Stories: An Interactive Narrative System for Children, {\em CoRR},  Vol.~abs/2011.04242 (online), \urle{https://arxiv.org/abs/2011.04242} (2020).
+
+\bibitem{10:ChopraVSS21}
+Chopra, B., Verma, K., Singhal, S. and Singla, U.: Reality Tales: Facilitating User-Character Interaction with Immersive Storytelling, {\em {CHI} '21: {CHI} Conference on Human Factors in Computing Systems, Virtual Event / Yokohama Japan, May 8-13, 2021, Extended Abstracts} (Kitamura, Y., Quigley, A., Isbister, K. and Igarashi, T., eds.), {ACM}, pp.\ 489:1--489:7 (online), \doi{10.1145/3411763.3451522} (2021).
+
+\bibitem{11:LimaGV20}
+de Lima, E.~S., Gheno, F.~J. and Viseu, A.: Sketch-Based Interaction for Planning-Based Interactive Storytelling, {\em 19th Brazilian Symposium on Computer Games and Digital Entertainment, SBGames 2020, Recife, Brazil, November 7-10, 2020}, {IEEE}, pp.\ 154--162 (online), \doi{10.1109/SBGAMES51465.2020.00029} (2020).
+
+\bibitem{1:ElgarfP22}
+Elgarf, M. and Peters, C.~E.: CreativeBot: a Creative Storyteller Agent Developed by Leveraging Pre-trained Language Models, {\em {IEEE/RSJ} International Conference on Intelligent Robots and Systems, {IROS} 2022, Kyoto, Japan, October 23-27, 2022}, {IEEE}, pp.\ 13438--13444 (online), \doi{10.1109/IROS47612.2022.9981033} (2022).
+
+\bibitem{4:HanC23}
+Han, A. and Cai, Z.: Design implications of generative {AI} systems for visual storytelling for young learners, {\em Proceedings of the 22nd Annual {ACM} Interaction Design and Children Conference, {IDC} 2023, Chicago, IL, USA, June 19-23, 2023}, {ACM}, pp.\ 470--474 (online), \doi{10.1145/3585088.3593867} (2023).
+
+\bibitem{2:LiuLWCS12}
+Liu, C., Liu, K., Wang, P., Chen, G. and Su, M.: Applying tangible story avatars to enhance children's collaborative storytelling, {\em Br. J. Educ. Technol.},  Vol.~43, No.~1, pp.\ 39--51 (online), \doi{10.1111/J.1467-8535.2010.01146.X} (2012).
+
+\bibitem{9:RyokaiC99}
+Ryokai, K. and Cassell, J.: StoryMat: a play space for collaborative storytelling, {\em {CHI} '99 Extended Abstracts on Human Factors in Computing Systems, {CHI} Extended Abstracts '99, Pittsburgh, Pennsylvania, USA, May 15-20, 1999} (Atwood, M.~E., ed.), {ACM}, pp.\ 272--273 (online), \doi{10.1145/632716.632883} (1999).
+
+\bibitem{8:ShakeriND21}
+Shakeri, H., Neustaedter, C. and DiPaola, S.: {SAGA:} Collaborative Storytelling with {GPT-3}, {\em Companion Publication of the 2021 {ACM} Conference on Computer Supported Cooperative Work and Social Computing, {CSCW} 2021, Virtual Event, USA, October 23-27, 2021} (Birnholtz, J.~P., Ciolfi, L., Ding, S., Fussell, S.~R., Monroy{-}Hern{\'{a}}ndez, A., Munson, S., Shklovski, I. and Naaman, M., eds.), {ACM}, pp.\ 163--166 (online), \doi{10.1145/3462204.3481771} (2021).
+
+\bibitem{7:SunLLL17}
+Sun, M., Leite, I., Lehman, J.~F. and Li, B.: Collaborative Storytelling between Robot and Child: {A} Feasibility Study, {\em Proceedings of the 2017 Conference on Interaction Design and Children, Stanford, CA, USA, June 27-30, 2017} (Blikstein, P. and Abrahamson, D., eds.), {ACM}, pp.\ 205--214 (online), \doi{10.1145/3078072.3079714} (2017).
+
+\bibitem{14:WangRCRMB22}
+Wang, Z., Romat, H., Chevalier, F., Riche, N.~H., Murray{-}Rust, D. and Bach, B.: Interactive Data Comics, {\em {IEEE} Trans. Vis. Comput. Graph.},  Vol.~28, No.~1, pp.\ 944--954 (online), \doi{10.1109/TVCG.2021.3114849} (2022).
+
+\bibitem{12:ZhangXWYRWYWL22}
+Zhang, Z., Xu, Y., Wang, Y., Yao, B., Ritchie, D., Wu, T., Yu, M., Wang, D. and Li, T.~J.: StoryBuddy: {A} Human-AI Collaborative Chatbot for Parent-Child Interactive Storytelling with Flexible Parental Involvement, {\em {CHI} '22: {CHI} Conference on Human Factors in Computing Systems, New Orleans, LA, USA, 29 April 2022 - 5 May 2022} (Barbosa, S. D.~J., Lampe, C., Appert, C., Shamma, D.~A., Drucker, S.~M., Williamson, J.~R. and Yatani, K., eds.), {ACM}, pp.\ 218:1--218:21 (online), \doi{10.1145/3491102.3517479} (2022).
+
+\bibitem{3:ZhaoB23}
+Zhao, Y. and Bao, X.: Narratron: Collaborative Writing and Shadow-playing of Children Stories with Large Language Models, {\em Adjunct Proceedings of the 36th Annual {ACM} Symposium on User Interface Software and Technology, {UIST} 2023, San Francisco, CA, USA, 29 October 2023- 1 November 2023} (Follmer, S., Han, J., Steimle, J. and Riche, N.~H., eds.), {ACM}, pp.\ 119:1--119:6 (online), \doi{10.1145/3586182.3625120} (2023).
 
 \end{thebibliography}

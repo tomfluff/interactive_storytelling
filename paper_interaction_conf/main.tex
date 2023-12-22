@@ -38,22 +38,47 @@
 \paffiliate{PUTokyo}{The University of Tokyo}
 
 \author{Yotam Sechayk}{UTokyo}[sechayk-yotam@g.ecc.u-tokyo.ac.jp]
-\author{Isa A. Randsalu}{LU,PUTokyo}[randsalu-isa071@g.ecc.u-tokyo.ac.jp]
 \author{Gabriela A. Penarska}{TUD,PUTokyo}[gabriela-penarska@g.ecc.u-tokyo.ac.jp]
+\author{Isa A. Randsalu}{LU,PUTokyo}[randsalu-isa071@g.ecc.u-tokyo.ac.jp]
 \author{Christian Arzate Cruz}{HRI}[]
+
 \author{Takeo Igarashi}{UTokyo}[]
 
 \begin{abstract}
-    Test.
+    Storytelling is a valuable tradition that plays a crucial role in child development, fostering creativity and a sense of agency. However, many parents struggle to engage in interactive storytelling due to various constraints. As a result, children often consume stories passively, missing out on the opportunity to participate in the creative process. To address this, we propose MyStoryKnight, a character drawing driven storytelling system. By leveraging LLM hallucinations, our system generates adventure-type stories that allow users to navigate and make choices. Through a complexity analysis algorithm, we ensure the coherence and consistency of the generated stories, resulting in engaging and easily comprehensible narratives.
 \end{abstract}
 
 \maketitle
 
 %1
 \section{Introduction}
+\label{sec:introduction}
+
+Creativity is increasingly recognized as a crucial aspect of the modern working environment. In the context of child development, creativity plays a pivotal role in fostering learning and growth \cite{1:ElgarfP22}, which extends to adulthood. As a result, there has been a growing interest in leveraging creative artificial intelligence (AI) and exploring the use of AI agents to stimulate children's creativity. Previous research has demonstrated the positive effects of incorporating AI agents with creative abilities in enhancing children's creative thinking \cite{1:ElgarfP22}. Additionally, the use of storytelling robots and virtual characters as interactive tools has gained traction in recent years \cite{7:SunLLL17}. These advancements highlight the potential of AI technologies in promoting and nurturing creativity in children, thereby shaping their cognitive and emotional development.
+
+One effective way to promote creativity is through storytelling, a popular activity for entertaining and bonding with children \cite{7:SunLLL17}. Storytelling plays a crucial role in child development \cite{9:RyokaiC99} and offers several ultiple benefits \cite{7:SunLLL17}. Both story-making and storytelling contribute to the development of verbal and social skills \cite{1:ElgarfP22}, and recent research suggests that storytelling broadens vocabulary, improves narrative comprehension, and accelerates cognitive development in children \cite{7:SunLLL17}. Creating fictional worlds and characters helps children improve their language skills, both in comprehension and usage \cite{13:abs-2011-04242}.
+
+Collaborative storytelling has been shown to be an effective way of building and strengthening relationships \cite{8:ShakeriND21}, also playing an important role in parent-child bonding \cite{12:ZhangXWYRWYWL22}. Interactive stories stimulate children's thinking and imagination \cite{11:LimaGV20}, and help children make sense of their world through shared experiences \cite{9:RyokaiC99}. Despite these benefits, many parents do not regularly engage in interactive storytelling with their children due to limited availability, time, or energy [7, 12].
+
+To address this, we propose \textbf{MyStoryKnight}, a character drawing driven storytelling system that uses LLM hallucinations to generate an adventure-type story with user agency and navigation. Our system uses drawings of characters as input, and generates an unfolding story that the user can navigate through based on their choices. Using a complexity analysis algorithm, we guide the LLM hallucinations to generate a coherent and consistent story. Resulting in a story that is both engaging and easy to follow.
+
+Our contributions are:
+\begin{itemize}
+    \item Storytelling system that uses the character drawing as a basis for the story.
+    \item LLM hallucinations to generate an adventure-type story with user navigation.
+    \item Complexity analysis of story generation for coherency and consistency.
+\end{itemize}
+
 
 %2
 \section{Related Work}
+\label{sec:related-work}
+
+Previous works have explored using interactive dialogue to develop congruent stories, utilizing online information to enrich narratives \cite{13:abs-2011-04242}, creating storytelling experiences with interactive questioning and answering through collaboration between parents and AI \cite{12:ZhangXWYRWYWL22}, and input and personalization have been used to make stories more engaging and informative \cite{14:WangRCRMB22}. Research has also focused on enhancing collaborative storytelling between friends and how AI can promote curiosity and discovery by hallucinating new details \cite{8:ShakeriND21}. Other studies have considered interaction with existing characters \cite{10:ChopraVSS21}, image-based storytelling with non-verbal prompt generation \cite{4:HanC23}, controlling characters through physical gestures \cite{2:LiuLWCS12}, and physical body engagement \cite{3:ZhaoB23}. The possibility of using sketches to influence character behavior or affect the plot of a story, allowing users to interact with narratives by sketching objects, has also been explored \cite{11:LimaGV20}. Multi-modal systems, combining oral narration, visual images, and body engagement \cite{3:ZhaoB23}, and systems using user input in the form of prompts to have AI generate high-quality images for story creation \cite{4:HanC23} are also examples of prior works.
+
+Previous studies suggest that many current interactive AI systems lack the ability to encourage children's enthusiasm. It has also been shown that interesting stories often involve narrative shifts and that interactive narratives do not have to be strictly straightforward or logical. However, it is crucial to maintain some elements that remain constant, such as character and location descriptions \cite{13:abs-2011-04242}.
+
+Achieving high child engagement is a critical factor in interactive storytelling \cite{12:ZhangXWYRWYWL22}. Challenges in interactive storytelling include the difficulty of maintaining a child's attention, especially when there is little change in activities or interaction patterns \cite{13:abs-2011-04242}. Narrators must respond in a way that keeps the child interested while maintaining the narrative trajectory. Children quickly become bored and distracted, and in terms of storytelling, it's an issue that becomes more problematic when the parent is not present \cite{12:ZhangXWYRWYWL22}. Another crucial factor in storytelling is the story characters, and providing users with the possibility to interact with characters can offer a more immersive and informative experience \cite{10:ChopraVSS21}. Interactivity and authorship, where computational methods allow users to participate in story creation, are fundamental aspects of interactive storytelling \cite{11:LimaGV20}.
 
 %3
 \section{System Overview}
