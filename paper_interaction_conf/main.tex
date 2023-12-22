@@ -8,6 +8,7 @@
 
 \usepackage{graphicx}
 \usepackage{latexsym}
+\usepackage{url}
 
 
 \def\Underline{\setbox0\hbox\bgroup\let\\\endUnderline}
@@ -63,7 +64,7 @@ Despite all the benefits of practicing storytelling, many children do not have t
 
 \begin{figure*}[t]
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/1920x720px.png}
+    \includegraphics[width=0.9\textwidth]{figures/2400x600px.png}
     \caption{MyStoryKnight system overview.}
     \label{fig:system-overview}
 \end{figure*}
@@ -94,17 +95,41 @@ However, utilizing hallucinations to generate stories has not been explored in t
 
 %3
 \section{System Overview}
+\label{sec:system-overview}
+To address these issues, we designed \textbf{MyStoryKnight}, an interactive storytelling that uses drawings as input and utilizes LLM hallucinations to generate a branching story. Agency is a critical factor in interactive storytelling \cite{11:LimaGV20}, as it promotes engagement and immersion \cite{12:ZhangXWYRWYWL22}. Our system supports user agency by allowing users to navigate the story through their choices. Additionally, we use a complexity analysis algorithm to guide the LLM hallucinations to generate a coherent and consistent story, fitting for children's comprehension.
+
+\subsection{System Architecture}
+\label{subsec:system-architecture}
+The system architecture is shown in Figure \ref{fig:system-architecture}. The system consists of three main components:
+\begin{enumerate}
+    \item \textbf{Drawing Analysis}: Extracting visual features from the user's drawing. The visual features are used as a prompt for the LLM to hallucinate a character description and a background story.
+    \item \textbf{Story Generator}: Story is generated based on user selection on a set of actions. LLM hallucinations are used to generate the story and actions.
+    \item \textbf{Complexity Analysis}: Natural language processing (NLP) techniques are used to analyze the story's coherency and consistency. The results are used to guide the LLM hallucinations.
+\end{enumerate}
+To achieve out goals, we utilize GPT-4 \cite{17:abs-2303-08774} for drawing analysis and story generation. Additionally, we use spacy \cite{18:spacy} in addition to GPT-4 for complexity analysis. The system is implemented with Django, a Python web framework \cite{19:django}, and React, a JavaScript library for building user interfaces \cite{20:react}.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.45\textwidth]{figures/800x600px.png}
+    \caption{System architecture.}
+    \label{fig:system-architecture}
+\end{figure}
+
+\section{User Interface}
+\label{sec:user-interface}
+The user interface is shown in Figure \ref{fig:user-interface}. There are three
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.45\textwidth]{figures/800x600px.png}
+    \caption{User interface.}
+    \label{fig:user-interface}
+\end{figure}
+
+\subsection{Interaction Flow}
+\label{subsec:interaction-flow}
 
 %4
-\section{Implementation}
-
-%5
-\section{Evaluation}
-
-%6
-\section{Discussion}
-
-%7
 \section{Conclusion}
 
 % Acknowledgment

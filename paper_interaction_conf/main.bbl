@@ -1,5 +1,8 @@
 \begin{thebibliography}{10}
 
+\bibitem{18:spacy}
+: spaCy 3.0: Industrial-Strength Natural Language Processing, \url{https://spacy.io/} (2020).
+
 \bibitem{13:abs-2011-04242}
 Burtenshaw, B.: {AI} Stories: An Interactive Narrative System for Children, {\em CoRR},  Vol.~abs/2011.04242 (online), \urle{https://arxiv.org/abs/2011.04242} (2020).
 
@@ -15,11 +18,20 @@ de Lima, E.~S., Gheno, F.~J. and Viseu, A.: Sketch-Based Interaction for Plannin
 \bibitem{1:ElgarfP22}
 Elgarf, M. and Peters, C.~E.: CreativeBot: a Creative Storyteller Agent Developed by Leveraging Pre-trained Language Models, {\em {IEEE/RSJ} International Conference on Intelligent Robots and Systems, {IROS} 2022, Kyoto, Japan, October 23-27, 2022}, {IEEE}, pp.\ 13438--13444 (online), \doi{10.1109/IROS47612.2022.9981033} (2022).
 
+\bibitem{20:react}
+Facebook: React, \url{https://reactjs.org/} (2021).
+
+\bibitem{19:django}
+Foundation, D.~S.: Django, \url{https://www.djangoproject.com/} (2021).
+
 \bibitem{4:HanC23}
 Han, A. and Cai, Z.: Design implications of generative {AI} systems for visual storytelling for young learners, {\em Proceedings of the 22nd Annual {ACM} Interaction Design and Children Conference, {IDC} 2023, Chicago, IL, USA, June 19-23, 2023}, {ACM}, pp.\ 470--474 (online), \doi{10.1145/3585088.3593867} (2023).
 
 \bibitem{2:LiuLWCS12}
 Liu, C., Liu, K., Wang, P., Chen, G. and Su, M.: Applying tangible story avatars to enhance children's collaborative storytelling, {\em Br. J. Educ. Technol.},  Vol.~43, No.~1, pp.\ 39--51 (online), \doi{10.1111/J.1467-8535.2010.01146.X} (2012).
+
+\bibitem{17:abs-2303-08774}
+OpenAI: {GPT-4} Technical Report, {\em CoRR},  Vol.~abs/2303.08774 (online), \doi{10.48550/ARXIV.2303.08774} (2023).
 
 \bibitem{9:RyokaiC99}
 Ryokai, K. and Cassell, J.: StoryMat: a play space for collaborative storytelling, {\em {CHI} '99 Extended Abstracts on Human Factors in Computing Systems, {CHI} Extended Abstracts '99, Pittsburgh, Pennsylvania, USA, May 15-20, 1999} (Atwood, M.~E., ed.), {ACM}, pp.\ 272--273 (online), \doi{10.1145/632716.632883} (1999).
