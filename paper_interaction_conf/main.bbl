@@ -30,6 +30,12 @@ Han, A. and Cai, Z.: Design implications of generative {AI} systems for visual s
 \bibitem{2:LiuLWCS12}
 Liu, C., Liu, K., Wang, P., Chen, G. and Su, M.: Applying tangible story avatars to enhance children's collaborative storytelling, {\em Br. J. Educ. Technol.},  Vol.~43, No.~1, pp.\ 39--51 (online), \doi{10.1111/J.1467-8535.2010.01146.X} (2012).
 
+\bibitem{22:dalle}
+OpenAI: DALL-E, \url{https://openai.com/blog/dall-e/} (2021).
+
+\bibitem{21:openai-api}
+OpenAI: OpenAI API, \url{https://openai.com/blog/openai-api/} (2021).
+
 \bibitem{17:abs-2303-08774}
 OpenAI: {GPT-4} Technical Report, {\em CoRR},  Vol.~abs/2303.08774 (online), \doi{10.48550/ARXIV.2303.08774} (2023).
 

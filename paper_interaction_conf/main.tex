@@ -117,7 +117,7 @@ To achieve out goals, we utilize GPT-4 \cite{17:abs-2303-08774} for drawing anal
 
 \section{User Interface}
 \label{sec:user-interface}
-The user interface is shown in Figure \ref{fig:user-interface}. There are three
+The user interface is shown in Figure \ref{fig:user-interface}. The main interaction screen consists of an image upload button, an action selector, a reset button, and an output panel. The system uses a webcam to scan and identify user drawings which are then uploaded and analyzed. The story is them told using speech sythesis with the OpenAI API \cite{21:openai-api}, and story images are generated while mimicing the style of the user. Actions are then presented to the user and could be activated by clicking on then, or alternatively by voice commands. The user can also choose to restart the story at any point.
 
 \begin{figure}[t]
     \centering
@@ -128,9 +128,51 @@ The user interface is shown in Figure \ref{fig:user-interface}. There are three
 
 \subsection{Interaction Flow}
 \label{subsec:interaction-flow}
+In this section, we describe the interaction flow of the system.
+
+\vspace{10pt} % Add 10pt of vertical spacing
+
+\begin{quote}
+    \textit{Our story begind with a few colord strokes on a piece of paper.}
+\end{quote}
+
+\vspace{10pt} % Add 10pt of vertical spacing
+
+The user draws a character on a piece of paper, and the system scans the drawing using a webcam (Fig. \ref{fig:knight}).
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.35\textwidth]{figures/knight.png}
+    \caption{An example of a user drawing. A drawing of a knight, generated with OpenAI's DALL-E \cite{22:dalle}.}
+    \label{fig:knight}
+\end{figure}
+
+The drawing is then uploaded to the system and analyzed. The system then generates a character description and a background story based on the drawing. The background story is then told to the user.
+
+\vspace{10pt} % Add 10pt of vertical spacing
+
+\begin{quote}
+    \textit{Sir Colorful, the most vibrant knight in all the land, is preparing for the Grand Tournament where knights from all across the realms come together to showcase their bravery and skills. Each color on Sir Colorfuls armor and shield represents a virtue: blue for loyalty, yellow for generosity, green for hope, and red for courage. With his trusty sword and shield, Sir Colorful is ready to face any challenge and make new friends along the way.}
+\end{quote}
+
+\vspace{10pt} % Add 10pt of vertical spacing
+
+The user is then presented with a set of actions to choose from: \verb|Tournament| or \verb|Castle|. These choices are then fed into GPT-4 to generate the next part of the story, and the next set of actions. The user chooses \verb|Tournament| and the story continues.
+
+\vspace{10pt} % Add 10pt of vertical spacing
+
+\begin{quote}
+    \textit{Excitement bubbled in Sir Colorful's heart as he prepared for the Grand Tournament, where knights from all around would show off their bravery and skills. His trusty sword and shield in hand, Sir Colorful was ready to embark on a colorful adventure. Which virtue do you think helped him get ready?}
+\end{quote}
+
+\vspace{10pt} % Add 10pt of vertical spacing
+
+This leads to the following actions: \verb|Jousting| and \verb|Dragon hunting|. The user makes their choice and the story continues. This process repeats until the user chooses to end the story.
 
 %4
 \section{Conclusion}
+\label{sec:conclusion}
+In this paper, we presented \textit{MyStoryKnight}, an interactive storytelling system that uses character drawings as input. We generate an adventure-type story with multiple explorable branches using LLM hallucinations. Additionally, we use a complexity analysis algorithm to guide the LLM hallucinations to generate a coherent and consistent story. We believe that the use of a drawing as input further improves the engagement in the story and characters. In the future we plan to hold a user study to evaluate the effectiveness of our system in promoting creativity and engagement.
 
 % Acknowledgment
 \begin{acknowledgment}
