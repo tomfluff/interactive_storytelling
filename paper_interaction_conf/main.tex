@@ -1,6 +1,6 @@
 %%
 %% Interaction 2024 Technical Report Submission
-%% V1.0 (2023/12/22)
+%% V1.6 (2023/12/22)
 %% 
 
 \documentclass[submit,techrep,english]{ipsj}
@@ -39,12 +39,11 @@
 \affiliate{UTokyo}{The University of Tokyo}
 \paffiliate{PUTokyo}{The University of Tokyo}
 
-\author{Yotam Sechayk}{UTokyo}[sechayk-yotam@g.ecc.u-tokyo.ac.jp]
-\author{Gabriela A. Penarska}{TUD,PUTokyo}[gabriela-penarska@g.ecc.u-tokyo.ac.jp]
-\author{Isa A. Randsalu}{LU,PUTokyo}[randsalu-isa071@g.ecc.u-tokyo.ac.jp]
-\author{Christian Arzate Cruz}{HRI}[]
-
-\author{Takeo Igarashi}{UTokyo}[]
+\author{Sechayk Yotam}{UTokyo}[sechayk-yotam@g.ecc.u-tokyo.ac.jp]
+\author{Penarska Gabriela A.}{TUD,PUTokyo}[gabriela-penarska@g.ecc.u-tokyo.ac.jp]
+\author{Randsalu Isa A.}{LU,PUTokyo}[randsalu-isa071@g.ecc.u-tokyo.ac.jp]
+\author{Arzate Cruz Christian}{HRI}[]
+\author{Igarashi Takeo}{UTokyo}[]
 
 
 \begin{abstract}
@@ -64,8 +63,8 @@ Despite all the benefits of practicing storytelling, many children do not have t
 
 \begin{figure*}[t]
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/2400x600px.png}
-    \caption{MyStoryKnight system overview.}
+    \includegraphics[width=0.95\textwidth]{figures/system-overview.png}
+    \caption{MyStoryKnight system overview. Drawing is anaylzed with GPT-4. Backstory and action choices are presented to the user. Story unfolds based on user choice.}
     \label{fig:system-overview}
 \end{figure*}
 
@@ -96,38 +95,34 @@ However, utilizing hallucinations to generate stories has not been explored in t
 %3
 \section{System Overview}
 \label{sec:system-overview}
-To address these issues, we designed \textbf{MyStoryKnight}, an interactive storytelling that uses drawings as input and utilizes LLM hallucinations to generate a branching story. Agency is a critical factor in interactive storytelling \cite{11:LimaGV20}, as it promotes engagement and immersion \cite{12:ZhangXWYRWYWL22}. Our system supports user agency by allowing users to navigate the story through their choices. Additionally, we use a complexity analysis algorithm to guide the LLM hallucinations to generate a coherent and consistent story, fitting for children's comprehension.
+We designed \textbf{MyStoryKnight}, an interactive storytelling that uses drawings as input and utilizes LLM hallucinations to generate a branching story. Agency is a critical factor in interactive storytelling \cite{11:LimaGV20}, as it promotes engagement and immersion \cite{12:ZhangXWYRWYWL22}. Our system supports user agency by allowing users to navigate the story through their choices. Additionally, we use a complexity analysis algorithm to guide the LLM hallucinations to generate a coherent and consistent story, fitting for children's comprehension.
 
 \subsection{System Architecture}
 \label{subsec:system-architecture}
-The system architecture is shown in Figure \ref{fig:system-architecture}. The system consists of three main components:
+The system consists of three main components:
 \begin{enumerate}
     \item \textbf{Drawing Analysis}: Extracting visual features from the user's drawing. The visual features are used as a prompt for the LLM to hallucinate a character description and a background story.
-    \item \textbf{Story Generator}: Story is generated based on user selection on a set of actions. LLM hallucinations are used to generate the story and actions.
+    \item \textbf{Story Generator}: Story is generated based on user selection on a set of actions. LLM hallucinations are used to generate both the story and actions.
     \item \textbf{Complexity Analysis}: Natural language processing (NLP) techniques are used to analyze the story's coherency and consistency. The results are used to guide the LLM hallucinations.
 \end{enumerate}
-To achieve out goals, we utilize GPT-4 \cite{17:abs-2303-08774} for drawing analysis and story generation. Additionally, we use spacy \cite{18:spacy} in addition to GPT-4 for complexity analysis. The system is implemented with Django, a Python web framework \cite{19:django}, and React, a JavaScript library for building user interfaces \cite{20:react}.
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.45\textwidth]{figures/800x600px.png}
-    \caption{System architecture.}
-    \label{fig:system-architecture}
-\end{figure}
+To achieve our goals, we utilize GPT-4 \cite{17:abs-2303-08774} for drawing analysis and story generation. Additionally, we use spacy \cite{18:spacy} in addition to GPT-4 for complexity analysis. The system is implemented with Django, a Python web framework \cite{19:django}, and React, a JavaScript library for building user interfaces \cite{20:react}.
 
 \section{User Interface}
 \label{sec:user-interface}
-The user interface is shown in Figure \ref{fig:user-interface}. The main interaction screen consists of an image upload button, an action selector, a reset button, and an output panel. The system uses a webcam to scan and identify user drawings which are then uploaded and analyzed. The story is them told using speech sythesis with the OpenAI API \cite{21:openai-api}, and story images are generated while mimicing the style of the user. Actions are then presented to the user and could be activated by clicking on then, or alternatively by voice commands. The user can also choose to restart the story at any point.
 
-\begin{figure}[t]
+The user interface is shown in Figure \ref{fig:user-interface}. The main interaction screen consists of an action selection area (bottom), a restart button (top-right), a microphone indication toggle (bottom-left), and a story output panel (center).
+
+\begin{figure}[h]
     \centering
-    \includegraphics[width=0.45\textwidth]{figures/800x600px.png}
-    \caption{User interface.}
+    \includegraphics[width=0.45\textwidth]{figures/user-interface.png}
+    \caption{Mockup of the user interface.}
     \label{fig:user-interface}
 \end{figure}
 
-\subsection{Interaction Flow}
-\label{subsec:interaction-flow}
+The system uses a webcam to scan and identify user drawings which are then uploaded and analyzed. The story is then told using speech synthesis with the OpenAI API \cite{21:openai-api}, and story images are generated using DALL-E \cite{22:dalle}. The generated images are optimized to maintain a style similar to that of the user. Actions are then presented to the user, and these could be activated by clicking, or alternatively by voice commands. The user can also choose to restart the story at any point.
+
+\section{Experiencing MyStoryKnight}
+\label{subsec:using-mystoryknight}
 In this section, we describe the interaction flow of the system.
 
 \vspace{10pt} % Add 10pt of vertical spacing
@@ -140,9 +135,9 @@ In this section, we describe the interaction flow of the system.
 
 The user draws a character on a piece of paper, and the system scans the drawing using a webcam (Fig. \ref{fig:knight}).
 
-\begin{figure}
+\begin{figure}[h]
     \centering
-    \includegraphics[width=0.35\textwidth]{figures/knight.png}
+    \includegraphics[width=0.3\textwidth]{figures/knight.png}
     \caption{An example of a user drawing. A drawing of a knight, generated with OpenAI's DALL-E \cite{22:dalle}.}
     \label{fig:knight}
 \end{figure}
@@ -152,22 +147,29 @@ The drawing is then uploaded to the system and analyzed. The system then generat
 \vspace{10pt} % Add 10pt of vertical spacing
 
 \begin{quote}
-    \textit{Sir Colorful, the most vibrant knight in all the land, is preparing for the Grand Tournament where knights from all across the realms come together to showcase their bravery and skills. Each color on Sir Colorfuls armor and shield represents a virtue: blue for loyalty, yellow for generosity, green for hope, and red for courage. With his trusty sword and shield, Sir Colorful is ready to face any challenge and make new friends along the way.}
+    \textit{Sir Colorful, the most vibrant knight in all the land. Each color on Sir Colorfuls armor and shield represents a virtue: blue for loyalty, yellow for generosity, green for hope, and red for courage. With his trusty sword and shield, Sir Colorful is ready to face any challenge.}
 \end{quote}
 
 \vspace{10pt} % Add 10pt of vertical spacing
 
-The user is then presented with a set of actions to choose from: \verb|Tournament| or \verb|Castle|. These choices are then fed into GPT-4 to generate the next part of the story, and the next set of actions. The user chooses \verb|Tournament| and the story continues.
+The user is then presented with a set of actions to choose from: \verb|Go to tournament| or \verb|Run away|. These choices are then fed into GPT-4 to generate the next part of the story, and the next set of actions. The user chooses \verb|Go to tournament| and the story continues (Fig. \ref{fig:tournament}).
 
 \vspace{10pt} % Add 10pt of vertical spacing
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.35\textwidth]{figures/tournament-hall.png}
+    \caption{An example output of the system, the \'tournament hall\'. Generated with OpenAI's DALL-E \cite{22:dalle}.}
+    \label{fig:tournament}
+\end{figure}
 
 \begin{quote}
-    \textit{Excitement bubbled in Sir Colorful's heart as he prepared for the Grand Tournament, where knights from all around would show off their bravery and skills. His trusty sword and shield in hand, Sir Colorful was ready to embark on a colorful adventure. Which virtue do you think helped him get ready?}
+    \textit{The tournament hall was filled with knights from all across the realms, each one more colorful than the last. Sir Colorful was eager to make new friends and show off his skills. But first he had to comence his training.}
 \end{quote}
 
 \vspace{10pt} % Add 10pt of vertical spacing
 
-This leads to the following actions: \verb|Jousting| and \verb|Dragon hunting|. The user makes their choice and the story continues. This process repeats until the user chooses to end the story.
+This leads to the following actions: \verb|Jousting| and \verb|Weight lifting|. The user makes their choice and the story continues. This process repeats until the user chooses to end the story.
 
 %4
 \section{Conclusion}
@@ -175,15 +177,14 @@ This leads to the following actions: \verb|Jousting| and \verb|Dragon hunting|. 
 In this paper, we presented \textit{MyStoryKnight}, an interactive storytelling system that uses character drawings as input. We generate an adventure-type story with multiple explorable branches using LLM hallucinations. Additionally, we use a complexity analysis algorithm to guide the LLM hallucinations to generate a coherent and consistent story. We believe that the use of a drawing as input further improves the engagement in the story and characters. In the future we plan to hold a user study to evaluate the effectiveness of our system in promoting creativity and engagement.
 
 % Acknowledgment
-\begin{acknowledgment}
-    Test.
-\end{acknowledgment}
+% \begin{acknowledgment}
+% \end{acknowledgment}
 
 % Bibliography
 \bibliographystyle{ipsjsort-e}
 \bibliography{references}
 
 % Appendix
-\appendix
+% \appendix
 
 \end{document}

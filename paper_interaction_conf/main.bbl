@@ -1,8 +1,5 @@
 \begin{thebibliography}{10}
 
-\bibitem{18:spacy}
-: spaCy 3.0: Industrial-Strength Natural Language Processing, \url{https://spacy.io/} (2020).
-
 \bibitem{13:abs-2011-04242}
 Burtenshaw, B.: {AI} Stories: An Interactive Narrative System for Children, {\em CoRR},  Vol.~abs/2011.04242 (online), \urle{https://arxiv.org/abs/2011.04242} (2020).
 
@@ -26,6 +23,9 @@ Foundation, D.~S.: Django, \url{https://www.djangoproject.com/} (2021).
 
 \bibitem{4:HanC23}
 Han, A. and Cai, Z.: Design implications of generative {AI} systems for visual storytelling for young learners, {\em Proceedings of the 22nd Annual {ACM} Interaction Design and Children Conference, {IDC} 2023, Chicago, IL, USA, June 19-23, 2023}, {ACM}, pp.\ 470--474 (online), \doi{10.1145/3585088.3593867} (2023).
+
+\bibitem{18:spacy}
+Honnibal, M. and Montani, I.: spaCy 3.0: Industrial-Strength Natural Language Processing, \url{https://spacy.io/} (2020).
 
 \bibitem{2:LiuLWCS12}
 Liu, C., Liu, K., Wang, P., Chen, G. and Su, M.: Applying tangible story avatars to enhance children's collaborative storytelling, {\em Br. J. Educ. Technol.},  Vol.~43, No.~1, pp.\ 39--51 (online), \doi{10.1111/J.1467-8535.2010.01146.X} (2012).
