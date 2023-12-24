@@ -81,16 +81,23 @@ Our contributions are:
 \label{sec:related-work}
 
 \subsection{Interactive Storytelling}
-Interactive storytelling is a form of storytelling in which the audience is an active participant \cite{14:WangRCRMB22}. Interactive storytelling has been shown to be an effective way of building and strengthening relationships \cite{15:SchlauchSG22}, also playing an important role in parent-child bonding \cite{12:ZhangXWYRWYWL22}. Interactive stories stimulate thinking and imagination \cite{11:LimaGV20}, and help children make sense of their world through shared experiences \cite{9:RyokaiC99}.
+Interactive storytelling is a form of storytelling in which the audience is an active participant \cite{14:WangRCRMB22}. Interactive storytelling has been shown to be an effective way of building and strengthening relationships \cite{15:SchlauchSG22}, playing an important role in parent-child bonding \cite{12:ZhangXWYRWYWL22}. Interactive stories stimulate thinking and imagination \cite{11:LimaGV20}, and help children make sense of their world through shared experiences \cite{9:RyokaiC99}.
 
-Prior work has explored physical interactivity through the use of tangible objects \cite{9:RyokaiC99} to create stories, and physical gestures to control characters \cite{2:LiuLWCS12} or generate stories \cite{3:ZhaoB23}. Other studies have explored the use of sketches to influence character behavior and plot development \cite{11:LimaGV20}. However, these studies have not explored the use of character drawings as the driving force behind the story.
+Prior work has explored physical interactivity through the use of tangible objects to create stories \cite{9:RyokaiC99}, and physical gestures to control characters \cite{2:LiuLWCS12} or create stories \cite{3:ZhaoB23}. Other studies have explored the use of sketches to influence character behavior and plot development \cite{11:LimaGV20}.
+
+However, these studies have not explored the use of tangible character drawings made by users as the driving force behind the story.
 
 \subsection{AI Storytelling}
-AI usage has been experiencing a surge in popularity in recent years, with many applications in the creative arts. Generative AI especially has the potential to contribute to creative processes \cite{6:TholanderJ23}. One such creative process could be storytelling. Prior work has explored how generative AI can be used to create stories \cite{13:abs-2011-04242}, and even collaborate in story generation with humans \cite{8:ShakeriND21}. Other studies explored how generative AI can be used to expand existing story worlds \cite{10:ChopraVSS21}, or generate multi-modal storytelling experiences \cite{4:HanC23}. However, while consistency and coherency are essential in storytelling, they are often overlooked in AI-generated stories.
+AI usage has been experiencing a surge in popularity in recent years, with many applications in the creative arts. Generative AI especially has the potential to contribute to creative processes \cite{6:TholanderJ23}. One such creative process could be storytelling.
+
+Prior work has explored how generative AI can be used to create stories \cite{13:abs-2011-04242}, and even collaborate in story generation with other humans \cite{8:ShakeriND21}. Other studies explored how generative AI can be used to expand existing story worlds \cite{10:ChopraVSS21}, or generate comprehensive multi-modal storytelling experiences \cite{4:HanC23}.
+
+However, while consistency and coherency are essential in storytelling, they are often overlooked in AI-generated stories.
 
 \subsection{Storytelling with Children}
-Children oriented storytelling has been explored widely in the past. Prior work has explored the use of robots as storytelling companions \cite{7:SunLLL17}, and the use of virtual characters to promote collaboreation \cite{2:LiuLWCS12}. Other studies have explored the use of AI agents to stimulate children's creativity \cite{1:ElgarfP22}. Other studies have shown how AI can support parent-child bonding \cite{12:ZhangXWYRWYWL22}, and encourage physical interaction and play \cite{3:ZhaoB23}.
-However, utilizing hallucinations to generate stories has not been explored in the context of user-agency for storytelling with children.
+Children oriented storytelling has been widely explored in the past. Prior work has examimned the use of robots as storytelling companions \cite{7:SunLLL17}, and the use of virtual characters to promote collaboreation \cite{2:LiuLWCS12}. Other studies have explored the use of AI agents to stimulate children's creativity \cite{1:ElgarfP22}, or show how AI can support parent-child bonding \cite{12:ZhangXWYRWYWL22}. Moreover, storytelling with AI-agents can encourage physical interaction and play \cite{3:ZhaoB23}.
+
+However, utilizing LLM hallucinations to generate stories has not been explored in the context of user-agency for storytelling with children.
 
 %3
 \section{System Overview}
@@ -105,11 +112,11 @@ The system consists of three main components:
     \item \textbf{Story Generator}: Story is generated based on user selection on a set of actions. LLM hallucinations are used to generate both the story and actions.
     \item \textbf{Complexity Analysis}: Natural language processing (NLP) techniques are used to analyze the story's coherency and consistency. The results are used to guide the LLM hallucinations.
 \end{enumerate}
-To achieve our goals, we utilize GPT-4 \cite{16:abs-2303-08774} for drawing analysis and story generation. Additionally, we use spacy \cite{17:spacy} in addition to GPT-4 for complexity analysis. The system is implemented with Django, a Python web framework \cite{18:django}, and React, a JavaScript library for building user interfaces \cite{19:react}.
+To achieve our goals, we utilize GPT-4 \cite{16:abs-2303-08774} for drawing analysis and story generation. Additionally, we use spacy \cite{17:spacy} in addition to the former for complexity analysis. The system is implemented with Django, a Python web framework \cite{18:django}, and React, a JavaScript library for building user interfaces \cite{19:react}.
 
 \subsection{Drawing Analysis}
 \label{subsec:drawing-analysis}
-Using prompt engineering methods \cite{22:abs-2302-11382}, we extract visual features, such as colors and detected elemments, from the user's drawing. We then generate a backstory for the character with consideration to the recognized visual features (Tab. \ref{tab:drawing-analysis}).
+Using prompt engineering methods \cite{22:abs-2302-11382}, we extract visual features, such as colors and detected elemments, from the user's drawing. We then generate a backstory for the character with consideration to the recognized visual features. Table \ref{tab:drawing-analysis} shows an exammple output for the input in Figure \ref{fig:knight}.
 
 \begin{table}[h]
     \centering
@@ -145,9 +152,9 @@ Using prompt engineering methods \cite{22:abs-2302-11382}, we extract visual fea
 
 \subsection{Story Generation}
 \label{subsec:story-generation}
-The story is generated using LLM hallucinations. The LLM hallucinations are guided by the user's choices, as well as the complexity analysis algorithm (Sec. \ref{subsec:complexity-analysis}), which is used to ensure the coherency and consistency of the story. The story is generated in parts, including a set of actions. The user can choose one of the actions, which leads to the next part of the story.
+The story is generated using LLM hallucinations. The LLM hallucinations are guided by the user's choices, as well as the complexity analysis algorithm (Section \ref{subsec:complexity-analysis}), which is used to ensure the coherency and consistency of the story. The story is generated in parts, alongside a set of actions. The user can choose one of the actions, which leads to the next part of the story.
 
-The story continues until one of the ending criterias are met:
+The story continues until one of the following ending criteria is met:
 \begin{enumerate}
     \item The user chooses to end the story.
     \item The story reaches a maximum number of parts.
@@ -192,7 +199,7 @@ The user interface is shown in Figure \ref{fig:user-interface}. The main interac
     \label{fig:user-interface}
 \end{figure}
 
-The system uses a webcam to scan and identify user drawings which are then uploaded and analyzed. The story is then told using speech synthesis with the OpenAI API \cite{20:openai-api}, and story images are generated using DALL-E \cite{21:dalle}. The generated images are optimized to maintain a style similar to that of the user. Actions are then presented to the user, and these could be activated by clicking, or alternatively by voice commands. The user can also choose to restart the story at any point.
+The system uses a webcam to scan and identify user drawings which are then uploaded and analyzed. The story is then told using speech synthesis with the OpenAI API \cite{20:openai-api}, and story images are generated using DALL-E \cite{21:dalle}. The generated images are optimized to maintain a style similar to that of the user. Actions are then presented to the user, and these could be activated by clicking, or alternatively using voice commands. The user can also choose to restart the story at any point.
 
 \section{Experiencing MyStoryKnight}
 \label{subsec:using-mystoryknight}
