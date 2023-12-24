@@ -39,6 +39,9 @@ class LLMStoryteller:
             self.llm = OpenAILLM()
             self.model = config["openai"]["model"]
             self.vmodel = config["openai"]["vmodel"]
+            self.vgen = config["openai"]["vgen"]
+            self.stt = config["openai"]["stt"]
+            self.tts = config["openai"]["tts"]
             logger.info(f"LLM storyteller initialized with model={self.model}")
         else:
             logger.error(f"LLM type {config['llm']['type']} is not implemented")
@@ -52,6 +55,17 @@ class LLMStoryteller:
             {"role": "user", "content": "Hello, who are you?"},
         ]
         return self.send_llm_request(messages)
+
+    def generate_story_image(self, prompt):
+        response = self.llm().images.generate(
+            model=self.vgen,
+            prompt=prompt,
+            size="1024x1024",
+            quality="standard",
+            n=1,
+        )
+        image_url = response.data[0].url
+        return image_url
 
     def generate_story_part(self, prompt):
         # Send LLM request to generate a story based on the given prompt
@@ -72,6 +86,16 @@ class LLMStoryteller:
     def calc_story_part_score(self, story_part):
         # Get the score of a story part
         pass
+
+    def transcribe_audio(self, audio):
+        audio_file = open(audio, "rb")
+        transcript = self.llm().audio.transcriptions.create(
+            model=self.stt,
+            file=audio_file,
+            response_format="verbose_json",
+            language="en",
+        )
+        return transcript.model_dump_json(indent=4)
 
     def __get_least_frequenct_word(self, story_part):
         # Get the least frequent word in the story part

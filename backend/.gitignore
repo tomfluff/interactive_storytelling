@@ -3,6 +3,8 @@ config.yml
 test.py
 *.log
 drawing.*
+transcript.*
+.data/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
