@@ -105,7 +105,80 @@ The system consists of three main components:
     \item \textbf{Story Generator}: Story is generated based on user selection on a set of actions. LLM hallucinations are used to generate both the story and actions.
     \item \textbf{Complexity Analysis}: Natural language processing (NLP) techniques are used to analyze the story's coherency and consistency. The results are used to guide the LLM hallucinations.
 \end{enumerate}
-To achieve our goals, we utilize GPT-4 \cite{17:abs-2303-08774} for drawing analysis and story generation. Additionally, we use spacy \cite{18:spacy} in addition to GPT-4 for complexity analysis. The system is implemented with Django, a Python web framework \cite{19:django}, and React, a JavaScript library for building user interfaces \cite{20:react}.
+To achieve our goals, we utilize GPT-4 \cite{16:abs-2303-08774} for drawing analysis and story generation. Additionally, we use spacy \cite{17:spacy} in addition to GPT-4 for complexity analysis. The system is implemented with Django, a Python web framework \cite{18:django}, and React, a JavaScript library for building user interfaces \cite{19:react}.
+
+\subsection{Drawing Analysis}
+\label{subsec:drawing-analysis}
+Using prompt engineering methods \cite{22:abs-2302-11382}, we extract visual features, such as colors and detected elemments, from the user's drawing. We then generate a backstory for the character with consideration to the recognized visual features (Tab. \ref{tab:drawing-analysis}).
+
+\begin{table}[h]
+    \centering
+    \caption{Sample of drawing analysis output.}
+    \label{tab:drawing-analysis}
+    \hbox to\hsize{\hfil
+        \begin{tabular}{|l|p{0.65\linewidth}|}
+            \hline
+            \textbf{Description}   & A drawing of a knight in colorful armor holding a sword and shield.                                                                                                                                                                                                                   \\
+            \hline
+            \textbf{Items}         & knight, sword, shield, helmet, armor                                                                                                                                                                                                                                                  \\
+            \hline
+            \textbf{Colors}        &
+            \begin{tabular}[c]{@{}l@{}}
+                - grey (usage: the sword and helmet)       \\
+                - blue and yellow (usage: shield sections) \\
+                - green (usage: part of the armor)         \\
+                - red (usage: part of the armor)           \\
+                - brown (usage: belt and boots)
+            \end{tabular}                                                                                                                                                                                                                                                                     \\
+            \hline
+            \textbf{Relationships} &
+            \begin{tabular}[c]{@{}l@{}}
+                - sword: held in the knight's right hand \\
+                - shield: held in the knight's left hand
+            \end{tabular}                                                                                                                                                                                                                                                                       \\
+            \hline
+            \textbf{Story}         & Sir Colorful, the most vibrant knight in all the land. Each color on Sir Colorfuls armor and shield represents a virtue: blue for loyalty, yellow for generosity, green for hope, and red for courage. With his trusty sword and shield, Sir Colorful is ready to face any challenge. \\
+            \hline
+        \end{tabular}\hfil}
+\end{table}
+
+
+\subsection{Story Generation}
+\label{subsec:story-generation}
+The story is generated using LLM hallucinations. The LLM hallucinations are guided by the user's choices, as well as the complexity analysis algorithm (Sec. \ref{subsec:complexity-analysis}), which is used to ensure the coherency and consistency of the story. The story is generated in parts, including a set of actions. The user can choose one of the actions, which leads to the next part of the story.
+
+The story continues until one of the ending criterias are met:
+\begin{enumerate}
+    \item The user chooses to end the story.
+    \item The story reaches a maximum number of parts.
+\end{enumerate}
+
+\subsection{Complexity Analysis}
+\label{subsec:complexity-analysis}
+To enhance the quality of the generated story, we have devised a plan that includes the following steps:
+
+\begin{itemize}
+    \item \textbf{Object and Entity Tracking:}
+          We will utilize NLP techniques to track and identify objects, people, and places mentioned in the story. This will allow us to maintain consistency and coherence throughout the narrative.
+
+    \item \textbf{Comparison with Existing Knowledge:}
+          We will compare the new story elements with the knowledge established in the previous parts of the story. By considering the differences, we can ensure that the new elements are integrated smoothly into the narrative.
+
+    \item \textbf{Word Frequency Analysis:}
+          We will analyze the mean word frequency as well as the maximum and minimum word frequency in each new story part. This analysis will help us avoid using too many uncommon words, ensuring that the story remains accessible and engaging for the target audience.
+
+    \item \textbf{Tracking New Story Elements:}
+          We will keep track of the number of new story elements introduced in each new story part. This will allow us to control the introduction of new elements and maintain a balance between familiarity and novelty in the story.
+\end{itemize}
+
+In order to create a compelling story, we will adhere to the following principles:
+
+\begin{enumerate}
+    \item \textbf{Consistency in Storytelling:} We will not abandon any item or element introduced in the story without a valid reason. This will ensure that all story elements contribute to the overall narrative and maintain coherence.
+    \item \textbf{Language Accessibility:} We will avoid using an excessive number of uncommon words. By keeping the language accessible, we will ensure that the story is easily understood and enjoyed by the target audience.
+    \item \textbf{Controlled Introduction of New Elements:} We will be mindful of introducing too many new story elements in each part. This will prevent overwhelming the audience and allow them to engage with and comprehend the story effectively.
+\end{enumerate}
+
 
 \section{User Interface}
 \label{sec:user-interface}
@@ -119,7 +192,7 @@ The user interface is shown in Figure \ref{fig:user-interface}. The main interac
     \label{fig:user-interface}
 \end{figure}
 
-The system uses a webcam to scan and identify user drawings which are then uploaded and analyzed. The story is then told using speech synthesis with the OpenAI API \cite{21:openai-api}, and story images are generated using DALL-E \cite{22:dalle}. The generated images are optimized to maintain a style similar to that of the user. Actions are then presented to the user, and these could be activated by clicking, or alternatively by voice commands. The user can also choose to restart the story at any point.
+The system uses a webcam to scan and identify user drawings which are then uploaded and analyzed. The story is then told using speech synthesis with the OpenAI API \cite{20:openai-api}, and story images are generated using DALL-E \cite{21:dalle}. The generated images are optimized to maintain a style similar to that of the user. Actions are then presented to the user, and these could be activated by clicking, or alternatively by voice commands. The user can also choose to restart the story at any point.
 
 \section{Experiencing MyStoryKnight}
 \label{subsec:using-mystoryknight}
@@ -138,7 +211,7 @@ The user draws a character on a piece of paper, and the system scans the drawing
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.3\textwidth]{figures/knight.png}
-    \caption{An example of a user drawing. A drawing of a knight, generated with OpenAI's DALL-E \cite{22:dalle}.}
+    \caption{An example of a user drawing. A drawing of a knight, generated with OpenAI's DALL-E \cite{21:dalle}.}
     \label{fig:knight}
 \end{figure}
 
@@ -159,7 +232,7 @@ The user is then presented with a set of actions to choose from: \verb|Go to tou
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.35\textwidth]{figures/tournament-hall.png}
-    \caption{An example output of the system, the \'tournament hall\'. Generated with OpenAI's DALL-E \cite{22:dalle}.}
+    \caption{An example output of the system, the \'tournament hall\'. Generated with OpenAI's DALL-E \cite{21:dalle}.}
     \label{fig:tournament}
 \end{figure}
 
@@ -169,7 +242,7 @@ The user is then presented with a set of actions to choose from: \verb|Go to tou
 
 \vspace{10pt} % Add 10pt of vertical spacing
 
-This leads to the following actions: \verb|Jousting| and \verb|Weight lifting|. The user makes their choice and the story continues. This process repeats until the user chooses to end the story.
+This leads to the following actions: \verb|Jousting| and \verb|Weight lifting|. The user makes their choice and the story continues. This process repeats until the user chooses to end the story or the story reaches a maximum number of parts.
 
 %4
 \section{Conclusion}
