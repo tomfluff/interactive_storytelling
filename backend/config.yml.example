@@ -3,6 +3,9 @@ openai:
   org: YOUR_OPENAI_ORG
   model: gpt-4-1106-preview
   vmodel: gpt-4-vision-preview
+  vgen: dall-e-3
+  tts: null
+  stt: whisper-1
 
 app:
   debug: true
