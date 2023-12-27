@@ -11,31 +11,41 @@
 ## Roadmap
 > Think simple, start small, and iterate.
 
-### Phase 1
-1. Create a basic Flask application.
-2. Generate a random session ID (GUID).
-3. Generate a JSON file with the session ID and the story so far.
+### Phase 1 (23/12/28-24/1/3)
+1. Create a basic Flask application. `(Yotam)`
+2. Generate a random session ID (GUID). `(Yotam)`
+3. Generate a JSON file with the session ID and the story so far. `(Yotam)`
 4. POST request to for an image (simple react component upload image to `/api`).
 5. React to connect to webcam and take a picture. `(Isa)`
-6. Display the analysis to the user and the user image.
-7. Ask the llm `where would this character go next?`.
-8. Based on button press we generate the next part of the story.
+6. Display the analysis to the user and the user image. `(Isa)`
+   1. [Open AI Docuentation](https://platform.openai.com/docs/guides/vision)
+7. Ask the llm `where would this character go next?`. `(Yotam)`
+8. Based on button press we generate the next part of the story. `(Yotam+Isa)`
    1. Feed the story so far.
    2. Feed special instructions.
-9. Generate the next possible actions.
-10. Rpeating with user choices.
-11. End the story with special llm instruction.
+9.  Generate the next possible actions. `(Yotam)`
+10. Rpeating with user choices, GET with session ID and choise ID. `(Isa)`
+11. End the story with special llm instruction. `(Yotam+Isa)`
 
-### Phase 2
+### Phase 2 (24/1/4-24/1/10)
 1. Incorporate TTS and STT.
 2. Do image gneration for story parts.
 3. Track story elememnts (nouns).
 4. Use the tracked elements to generate the next part of the story.
 5. Limit the complexity of the story.
 
-### Phase 3
+### Phase 3 (24/1/11-24/1/17)
 1. Refinements.
 2. Bug fixes.
+3. (maybe) Upload to Google Cloud Platform.
+
+### Phase 4 (24/1/18-24/1/24)
+1. Final touches.
+2. Create a simple video showcasing the project.
+3. Create the presentation.
+
+### Final Presentation (24/1/25)
+1. Present the project.
 
 ## About
 `MyStoryKnight` is a web application that allows users to create and experience interactive stories. The application is built using the [Flask](https://flask.palletsprojects.com/en/1.1.x/) framework for Python. As well as the [React](https://reactjs.org/) JavaScript library with [TypeScript](https://www.typescriptlang.org/).
