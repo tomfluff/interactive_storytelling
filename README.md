@@ -16,8 +16,8 @@
 2. Generate a random session ID (GUID).
 3. Generate a JSON file with the session ID and the story so far.
 4. POST request to for an image (simple react component upload image to `/api`).
-5. React to connect to webcam and take a picture.
-6. Display the analysis to the user and the image.
+5. React to connect to webcam and take a picture. `(Isa)`
+6. Display the analysis to the user and the user image.
 7. Ask the llm `where would this character go next?`.
 8. Based on button press we generate the next part of the story.
    1. Feed the story so far.
