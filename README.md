@@ -1,6 +1,42 @@
 # Interactive Storytelling
 *(This is a project for the Multimedia Interfaces class at the University of Tokyo.)*
 
+## Tasks
+- [x] Create a basic Flask application (BE).
+- [ ] Create a basic React application for backend testing (FE).
+- [ ] Immpleent integration with camera (FE).
+- [ ] Implement image upload mechanism locally (BE).
+- [ ] Complete interactions with LLM (BE).
+
+## Roadmap
+> Think simple, start small, and iterate.
+
+### Phase 1
+1. Create a basic Flask application.
+2. Generate a random session ID (GUID).
+3. Generate a JSON file with the session ID and the story so far.
+4. POST request to for an image (simple react component upload image to `/api`).
+5. React to connect to webcam and take a picture.
+6. Display the analysis to the user and the image.
+7. Ask the llm `where would this character go next?`.
+8. Based on button press we generate the next part of the story.
+   1. Feed the story so far.
+   2. Feed special instructions.
+9. Generate the next possible actions.
+10. Rpeating with user choices.
+11. End the story with special llm instruction.
+
+### Phase 2
+1. Incorporate TTS and STT.
+2. Do image gneration for story parts.
+3. Track story elememnts (nouns).
+4. Use the tracked elements to generate the next part of the story.
+5. Limit the complexity of the story.
+
+### Phase 3
+1. Refinements.
+2. Bug fixes.
+
 ## About
 `MyStoryKnight` is a web application that allows users to create and experience interactive stories. The application is built using the [Flask](https://flask.palletsprojects.com/en/1.1.x/) framework for Python. As well as the [React](https://reactjs.org/) JavaScript library with [TypeScript](https://www.typescriptlang.org/).
 
