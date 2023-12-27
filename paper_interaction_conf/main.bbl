@@ -15,28 +15,28 @@ de Lima, E.~S., Gheno, F.~J. and Viseu, A.: Sketch-Based Interaction for Plannin
 \bibitem{1:ElgarfP22}
 Elgarf, M. and Peters, C.~E.: CreativeBot: a Creative Storyteller Agent Developed by Leveraging Pre-trained Language Models, {\em {IEEE/RSJ} International Conference on Intelligent Robots and Systems, {IROS} 2022, Kyoto, Japan, October 23-27, 2022}, {IEEE}, pp.\ 13438--13444 (online), \doi{10.1109/IROS47612.2022.9981033} (2022).
 
-\bibitem{20:react}
+\bibitem{19:react}
 Facebook: React, \url{https://reactjs.org/} (2021).
 
-\bibitem{19:django}
+\bibitem{18:django}
 Foundation, D.~S.: Django, \url{https://www.djangoproject.com/} (2021).
 
 \bibitem{4:HanC23}
 Han, A. and Cai, Z.: Design implications of generative {AI} systems for visual storytelling for young learners, {\em Proceedings of the 22nd Annual {ACM} Interaction Design and Children Conference, {IDC} 2023, Chicago, IL, USA, June 19-23, 2023}, {ACM}, pp.\ 470--474 (online), \doi{10.1145/3585088.3593867} (2023).
 
-\bibitem{18:spacy}
+\bibitem{17:spacy}
 Honnibal, M. and Montani, I.: spaCy 3.0: Industrial-Strength Natural Language Processing, \url{https://spacy.io/} (2020).
 
 \bibitem{2:LiuLWCS12}
 Liu, C., Liu, K., Wang, P., Chen, G. and Su, M.: Applying tangible story avatars to enhance children's collaborative storytelling, {\em Br. J. Educ. Technol.},  Vol.~43, No.~1, pp.\ 39--51 (online), \doi{10.1111/J.1467-8535.2010.01146.X} (2012).
 
-\bibitem{22:dalle}
+\bibitem{21:dalle}
 OpenAI: DALL-E, \url{https://openai.com/blog/dall-e/} (2021).
 
-\bibitem{21:openai-api}
+\bibitem{20:openai-api}
 OpenAI: OpenAI API, \url{https://openai.com/blog/openai-api/} (2021).
 
-\bibitem{17:abs-2303-08774}
+\bibitem{16:abs-2303-08774}
 OpenAI: {GPT-4} Technical Report, {\em CoRR},  Vol.~abs/2303.08774 (online), \doi{10.48550/ARXIV.2303.08774} (2023).
 
 \bibitem{9:RyokaiC99}
@@ -56,6 +56,9 @@ Tholander, J. and Jonsson, M.: Design Ideation with {AI} - Sketching, Thinking a
 
 \bibitem{14:WangRCRMB22}
 Wang, Z., Romat, H., Chevalier, F., Riche, N.~H., Murray{-}Rust, D. and Bach, B.: Interactive Data Comics, {\em {IEEE} Trans. Vis. Comput. Graph.},  Vol.~28, No.~1, pp.\ 944--954 (online), \doi{10.1109/TVCG.2021.3114849} (2022).
+
+\bibitem{22:abs-2302-11382}
+White, J., Fu, Q., Hays, S., Sandborn, M., Olea, C., Gilbert, H., Elnashar, A., Spencer{-}Smith, J. and Schmidt, D.~C.: A Prompt Pattern Catalog to Enhance Prompt Engineering with ChatGPT, {\em CoRR},  Vol.~abs/2302.11382 (online), \doi{10.48550/ARXIV.2302.11382} (2023).
 
 \bibitem{12:ZhangXWYRWYWL22}
 Zhang, Z., Xu, Y., Wang, Y., Yao, B., Ritchie, D., Wu, T., Yu, M., Wang, D. and Li, T.~J.: StoryBuddy: {A} Human-AI Collaborative Chatbot for Parent-Child Interactive Storytelling with Flexible Parental Involvement, {\em {CHI} '22: {CHI} Conference on Human Factors in Computing Systems, New Orleans, LA, USA, 29 April 2022 - 5 May 2022} (Barbosa, S. D.~J., Lampe, C., Appert, C., Shamma, D.~A., Drucker, S.~M., Williamson, J.~R. and Yatani, K., eds.), {ACM}, pp.\ 218:1--218:21 (online), \doi{10.1145/3491102.3517479} (2022).
