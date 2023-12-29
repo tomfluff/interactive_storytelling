@@ -25,7 +25,7 @@ const CustomWebcam = () => {
   const upload = () => {
     const data = new FormData();
     if (imgSrc != null) {
-      data.append('img', imgSrc);
+      data.append('file', imgSrc);
     }
     fetch('http://127.0.0.1:5000/api/upload', {
       method: 'POST',
