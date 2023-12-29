@@ -11,6 +11,9 @@ app:
   debug: true
   logger: true
   image_generation: true
+  upload_folder: "uploads"
+  json_folder: "jsons"
+  allowed_extensions: ["png", "jpg", "jpeg", "gif"]
 
 server:
   log_location: "logs/app.log"
