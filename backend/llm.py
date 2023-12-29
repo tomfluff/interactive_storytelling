@@ -2,6 +2,7 @@ import json
 import logging
 import yaml
 import os
+import base64
 
 from openai import OpenAI
 
@@ -42,6 +43,7 @@ class LLMStoryteller:
             self.vgen = config["openai"]["vgen"]
             self.stt = config["openai"]["stt"]
             self.tts = config["openai"]["tts"]
+            self.upload_folder = config["app"]["upload_folder"]
             logger.info(f"LLM storyteller initialized with model={self.model}")
         else:
             logger.error(f"LLM type {config['llm']['type']} is not implemented")
@@ -56,6 +58,11 @@ class LLMStoryteller:
         ]
         return self.send_llm_request(messages)
 
+    # Function to encode the image
+    def encode_image(self, image_path):
+        with open(image_path, "rb") as image_file:
+            return base64.b64encode(image_file.read()).decode('utf-8')
+    
     def generate_story_image(self, prompt):
         response = self.llm().images.generate(
             model=self.vgen,
@@ -112,6 +119,15 @@ class LLMStoryteller:
     def __check_ending_condition(self):
         # Check if the story should be finished
         pass
+
+    def get_story_from_drawing(self, drawing_path, json_content=True):
+        # Encode image to base64 and str to send to llm
+        base64_drawing = self.encode_image(drawing_path)
+        drawing_ulr = f"data:image/jpeg;base64,{base64_drawing}"
+        # Send drawing to llm
+        json_content = self.understand_drawing(drawing_ulr, json_content=json_content)
+        # Return the result
+        return json_content
 
     def understand_drawing(self, drawing, json_content=True):
         try:
