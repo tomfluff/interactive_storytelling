@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 
 import React, { useEffect, useState } from 'react';
+import CustomWebcam from "./CustomWebcam"; // import the CustomWebcam component
 
 function App() {
   const [data, setData] = useState<{message: string}>({message: ''});
@@ -38,6 +39,9 @@ function App() {
         >
           Learn React
         </a>
+        <div>
+          <CustomWebcam />
+        </div>
       </header>
     </div>
   );
