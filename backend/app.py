@@ -1,10 +1,13 @@
+import base64
 import json
 import yaml
 import os
 from llm import LLMStoryteller
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from werkzeug.utils import secure_filename
+from PIL import Image
+from io import BytesIO
+
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -22,14 +25,13 @@ def get_data():
 
 
 # TODO: Change how the image is retrieved, and maybe change what's returned
-
 @app.route("/api/story", methods=["GET"])
 def get_story():
     # Load configurations from config.yml
     with open("config.yml", "r") as f:
         config = yaml.safe_load(f)
     # Get drawing
-    drawing_file = "superhero.jpeg" # Replace with uploaded file
+    drawing_file = "superhero.jpeg" # TODO: Replace with uploaded file
     drawing_path = os.path.join(config["app"]["upload_folder"], drawing_file)
     # Send drawing to llm
     llm = LLMStoryteller()
@@ -43,8 +45,34 @@ def get_story():
     return jsonify(data)
 
 
+# TODO: Not sure if this is correct
+@app.route("/api/upload_image", methods=["POST"])
+def upload_image():
+    # Load configurations from config.yml
+    with open("config.yml", "r") as f:
+        config = yaml.safe_load(f)
+    # TODO: Maybe change the format of the data
+    data = request.get_json()
+    img_data = data.split(',', 1)[1]
+    if data is None:
+        return jsonify({'error': 'No valid request body'})
+    else:
+        save_path = os.path.join(config["app"]["upload_folder"], "test.jpeg") # TODO: Replace image name with session id or something similar
+        # Convert and save the base64 string to image
+        save_base64_image(img_data, save_path)
+        return jsonify({"message": "File uploaded successfully"})
 
-# TODO: Doesn't work with the frontend yet
+
+# TODO: Not sure if this is the best way to do this
+def save_base64_image(base64_string, save_path):
+    # Decode the base64 string
+    image_data = base64.b64decode(base64_string)
+    # Create an image object from the decoded data
+    image = Image.open(BytesIO(image_data))
+    # Save the image to the specified path
+    image.save(save_path)
+
+
 @app.route("/api/upload", methods=["POST"])
 def upload_file():
     # Load configurations from config.yml
@@ -59,8 +87,7 @@ def upload_file():
         return jsonify({"error": "No file selected"})
 
     if file and allowed_file(file.filename, config["app"]["allowed_extensions"]):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(config["app"]["upload_folder"], filename))
+        file.save(os.path.join(config["app"]["upload_folder"], file.filename))
         return jsonify({"message": "File uploaded successfully"})
     else:
         return jsonify({"error": "Invalid file type"})

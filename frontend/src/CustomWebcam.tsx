@@ -5,41 +5,56 @@ import { useCallback, useRef, useState } from "react";
 
 const CustomWebcam = () => {
   const webcamRef = useRef<Webcam>(null);
-  const [imgSrc, setImgSrc] = useState<string | null>(null);
+  const [visible, setVisible] = useState<boolean>(false);
+  const [img, setImg] = useState<string | null>(null);
 
   // Capture photo from webcam
   const capture = useCallback(() => {
     if (webcamRef.current) {
       const imageSrc = webcamRef.current.getScreenshot();
-      setImgSrc(imageSrc);
+      setImg(imageSrc);
     }
   }, [webcamRef]);
 
   // Retake photo
-    const retake = () => {
-      setImgSrc(null);
+  const retake = () => {
+      setImg(null);
   };
 
-  // TODO: Dosen't work yet
+  // TODO: Not sure if this is the best way to do this
   // Send request to backend to upload image
   const upload = () => {
-    const data = new FormData();
-    if (imgSrc != null) {
-      data.append('file', imgSrc);
-    }
     fetch('http://127.0.0.1:5000/api/upload', {
       method: 'POST',
-      body: data,
+      headers: {
+        'Content-Type' : 'application/json'
+        },
+      body: JSON.stringify(img)
     })
       .then(response => response.json())
       .then(result => {console.log(result);})
       .catch(error => console.error(error));
+    setVisible(false);
+    setImg(null);
   };
+
+
+  const showWebcam = () => {
+    setVisible(true);
+  };
+
+  if (!visible) {
+    return (
+      <div className="container">
+        <button onClick={showWebcam}>Show Webcamera</button>
+      </div>
+    );
+  }
 
   return (
     <div className="container">
-      {imgSrc ? (
-        <img src={imgSrc} alt="webcam" />
+      {img ? (
+        <img src={img} alt="webcam" />
       ) : (
         <Webcam
           height={600}
@@ -51,13 +66,13 @@ const CustomWebcam = () => {
         />
       )}
       <div className="btn-container">
-        {imgSrc ? (
+        {img ? (
           <p>
             <button onClick={retake}>Retake photo</button>
             <button onClick={upload}>Upload photo</button>
           </p>
         ) : (
-          <button onClick={capture}>Capture photo</button>
+          <button onClick={capture}>Take photo</button>
         )}
       </div>
     </div>
