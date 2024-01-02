@@ -8,6 +8,7 @@ from flask_cors import CORS
 from PIL import Image
 from io import BytesIO
 
+session_id = "test_id" # TODO: Replace with real session id
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -30,19 +31,19 @@ def get_story():
     # Load configurations from config.yml
     with open("config.yml", "r") as f:
         config = yaml.safe_load(f)
-    # Get drawing
-    drawing_file = "superhero.jpeg" # TODO: Replace with uploaded file
-    drawing_path = os.path.join(config["app"]["upload_folder"], drawing_file)
+    # Get path to drawing
+    drawing_path = os.path.join(config["app"]["upload_folder"], f"{session_id}.jpeg")
+    if not os.path.isfile(drawing_path):
+        return jsonify({"message": "No drawing found"})
     # Send drawing to llm
     llm = LLMStoryteller()
     json_content = llm.get_story_from_drawing(drawing_path)
     # Create json file with the result from llm
-    json_file = os.path.join(config["app"]["json_folder"], f"{drawing_file.split('.')[0]}.json")
+    json_file = os.path.join(config["app"]["json_folder"], f"{session_id}.json")
     with open(json_file, 'w') as f:
         json.dump(json_content, f, indent=4)
     # Return json file with the story
-    data = {"story": json_content["story"]}
-    return jsonify(data)
+    return jsonify({"message": json_content["story"]})
 
 
 # TODO: Not sure if this is correct
@@ -57,7 +58,7 @@ def upload_image():
     if data is None:
         return jsonify({'error': 'No valid request body'})
     else:
-        save_path = os.path.join(config["app"]["upload_folder"], "test.jpeg") # TODO: Replace image name with session id or something similar
+        save_path = os.path.join(config["app"]["upload_folder"], f"{session_id}.jpeg") # TODO: Replace image name with session id or something similar
         # Convert and save the base64 string to image
         save_base64_image(img_data, save_path)
         return jsonify({"message": "File uploaded successfully"})

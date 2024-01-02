@@ -3,7 +3,7 @@ import Webcam from "react-webcam";
 
 import { useCallback, useRef, useState } from "react";
 
-const CustomWebcam = () => {
+const WebcamComponent = () => {
   const webcamRef = useRef<Webcam>(null);
   const [visible, setVisible] = useState<boolean>(false);
   const [img, setImg] = useState<string | null>(null);
@@ -24,7 +24,7 @@ const CustomWebcam = () => {
   // TODO: Not sure if this is the best way to do this
   // Send request to backend to upload image
   const upload = () => {
-    fetch('http://127.0.0.1:5000/api/upload', {
+    fetch('http://127.0.0.1:5000/api/upload_image', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json'
@@ -45,14 +45,14 @@ const CustomWebcam = () => {
 
   if (!visible) {
     return (
-      <div className="container">
-        <button onClick={showWebcam}>Show Webcamera</button>
+      <div>
+        <button onClick={showWebcam}>Webcamera</button>
       </div>
     );
   }
 
   return (
-    <div className="container">
+    <div>
       {img ? (
         <img src={img} alt="webcam" />
       ) : (
@@ -65,7 +65,7 @@ const CustomWebcam = () => {
           mirrored={false}
         />
       )}
-      <div className="btn-container">
+      <div>
         {img ? (
           <p>
             <button onClick={retake}>Retake photo</button>
@@ -79,4 +79,4 @@ const CustomWebcam = () => {
   );
 };
 
-export default CustomWebcam;
+export default WebcamComponent;
