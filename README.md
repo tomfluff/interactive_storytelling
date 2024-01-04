@@ -12,10 +12,10 @@
 > Think simple, start small, and iterate.
 
 ### Phase 1 (23/12/28-24/1/3)
-1. Create a basic Flask application. `(Yotam)`
-2. Generate a random session ID (GUID). `(Yotam)`
-3. Generate a JSON file with the session ID and the story so far. `(Yotam)`
-4. POST request to for an image (simple react component upload image to `/api`).
+1. Create a basic Flask application. `(Yotam)` [DONE]
+2. Generate a random session ID (GUID). `(Yotam)` [DONE]
+3. Generate a JSON file with the session ID and the story so far. `(Yotam)` [DONE]
+4. POST request to for an image (simple react component upload image to `/api`). `(Isa)`
 5. React to connect to webcam and take a picture. `(Isa)`
 6. Display the analysis to the user and the user image. `(Isa)`
    1. [Open AI Docuentation](https://platform.openai.com/docs/guides/vision)
@@ -91,6 +91,92 @@ Copy the `config.yml.example` file and add your own details.
 2. `cp config.yml.example config.yml`
 3. Replace with your details (API key, etc.).
 
+### Data structures
+General concept for data structures. This is not the final structure, but a general idea.
+Current approach is to use a local JSON file as a database for simmplicity.
+In actuality we impleemnt a **siplified version** of the DB structure with partial data.
+
+#### Session DB structure
+Session is a data structure with an id and a list of story ids.
+```json
+{
+    "id": "session_id",
+    "init_time": "initialization time",
+    "last_update": "last update time",
+    "curr_story": "story_id",
+    "stories": [
+        "story_id_1",
+        "story_id_2",
+        "story_id_3"
+    ]
+}
+```
+
+### Drawing DB structure
+Drawing is a data structure with an id and a list of story ids.
+```json
+{
+    "id": "drawing_id",
+    "name": "drawing_name",
+    "source": "url"/"file"/"camera",
+    "description": "drawing_description",
+    "items": [
+        {
+            "name": "item_name",
+            "type": "item_type",
+            "is_new": true/false,
+            "is_active": true/false,
+        },
+    ],
+    "colors": [
+        {
+            "color": "color_1",
+            "usage": "color_1_usage"
+        },
+    ],
+    "backstory": "drawing_backstory",
+}
+```
+
+#### Story DB structure
+Story is a data structure with an id and a list of story parts.
+```json
+{
+    "id": "story_id",
+    "drawing": "drawing",
+    "init_time": "initialization time",
+    "parts": [
+        {
+            "id": "story_part_id",
+            "time": "story_part_time",
+            "trigger": "story_part_trigger, the user choice",
+            "text": "story_part_text",
+            "image": "story_part_image",
+            "choices": [
+                {
+                    "id": "choice_id",
+                    "text": "choice_text",
+                    "description": "choice_description",
+                }
+            ],
+            "analytics": {
+                "entities": [
+                    {
+                        "name": "entity_name",
+                        "type": "entity_type",
+                        "is_new": true/false,
+                        "is_active": true/false,
+                    }
+                ],
+                "intensity": "intensity value (0-1)",
+                "emotion": "emotion, e.g. 'happy', 'sad', etc.",
+                "positioning": "positioning, e.g. 'start', 'middle', 'end', etc.",
+                "commplexity": "complexity value (0-1)",
+            },
+        }
+    ]
+}
+```
 
 ### Backend
 Using [Flask](https://flask.palletsprojects.com/en/1.1.x/).
