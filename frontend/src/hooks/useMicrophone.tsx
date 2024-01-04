@@ -12,8 +12,9 @@ const defaultVolumeConfig = {
   silence: 0.0001,
   speaking: 0.02,
   min_avg_speaking: 0.04,
-  detection_interval: 750,
-  time_interval: 128,
+  min_speaking_duration: 500,
+  detection_interval: 500,
+  time_interval: 250,
 };
 
 const createAudioMeter = async (
@@ -31,22 +32,18 @@ const createAudioMeter = async (
 };
 
 type TStatus = "stopped" | "listening" | "recording";
-type TMode =
-  | "mute"
-  | "prespeech"
-  | "speechatart"
-  | "speaking"
-  | "speechend"
-  | "silence";
+type TMode = "mute" | "speaking" | "silence";
 
 interface IVolumeMeterEventDetail {
   volume: number;
   timestamp: number;
+  duration: number;
 }
 
 interface IVoiceData {
   mode: TMode;
   isRecording: boolean;
+  isSpeechStarted: boolean;
   speechStart: number;
   speechEnd: number;
   speechItemsNum: number;
@@ -62,6 +59,7 @@ const useMicrophone = (
   const voiceDataRef = useRef<IVoiceData>({
     mode: "mute",
     isRecording: false,
+    isSpeechStarted: false,
     speechStart: -1,
     speechEnd: -1,
     speechItemsNum: 0,
@@ -78,25 +76,17 @@ const useMicrophone = (
 
   const handlePreSpeechProcessing = () => {
     ++voiceDataRef.current.preSpeechItemsNum;
-    console.log(
-      "handlePreSpeechProcessing, num: ",
-      voiceDataRef.current.preSpeechItemsNum,
-      "mode=",
-      voiceDataRef.current.mode,
-      "detect_interval=",
-      defaultVolumeConfig.detection_interval,
-      "time_interval=",
-      defaultVolumeConfig.time_interval
-    );
     if (
-      (voiceDataRef.current.mode === "silence" ||
-        voiceDataRef.current.mode === "mute") &&
       voiceDataRef.current.preSpeechItemsNum >=
-        defaultVolumeConfig.detection_interval /
-          defaultVolumeConfig.time_interval
+      defaultVolumeConfig.detection_interval / props.time_interval
     ) {
-      console.log("useEffect -> recorderRestart");
-      recorderRestart();
+      if (!voiceDataRef.current.isSpeechStarted) {
+        console.log(
+          "handlePreSpeechProcessing -> Restarting recorder, preSpeechItemsNum: ",
+          voiceDataRef.current.preSpeechItemsNum
+        );
+        recorderRestart();
+      }
       voiceDataRef.current.preSpeechItemsNum = 0;
     }
   };
@@ -105,6 +95,7 @@ const useMicrophone = (
     const detail: IVolumeMeterEventDetail = {
       volume: volume,
       timestamp: Date.now(),
+      duration: Date.now() - voiceDataRef.current.speechStart,
     };
     if (volume < props.mute) {
       document.dispatchEvent(new CustomEvent("mute", { detail: detail }));
@@ -116,21 +107,15 @@ const useMicrophone = (
   };
 
   const recorderRestart = () => {
-    if (voiceDataRef.current.isRecording) return;
-
-    console.log("recorderRestart");
     if (recorderRef.current) {
       recorderRef.current.stop();
       recorderRef.current.start();
-      setStatus("recording");
+      setStatus("listening");
       voiceDataRef.current.isRecording = true;
     }
   };
 
   const recorderPause = () => {
-    if (!voiceDataRef.current.isRecording) return;
-
-    console.log("recorderStop");
     if (recorderRef.current) {
       recorderRef.current.stop();
       setStatus("listening");
@@ -157,101 +142,74 @@ const useMicrophone = (
     sourceRef.current = null;
   };
 
-  const onVolumeEvent = (e: CustomEvent) => {
-    if (!voiceDataRef.current.mode) return;
+  const onMuteEvent = (e: CustomEvent<IVolumeMeterEventDetail>) => {
+    // console.log("onMuteEvent -> ", e.detail);
+    voiceDataRef.current.mode = "mute";
+    // TODO: Maybe do more...
+  };
 
-    if (e.type === "mute") {
-      voiceDataRef.current.mode = "mute";
-    } else if (voiceDataRef.current.mode === "mute" && e.type === "silence") {
-      voiceDataRef.current.mode = "silence";
-    } else if (
-      voiceDataRef.current.mode === "silence" &&
-      e.type === "speaking"
-    ) {
+  const onSpeakingEvent = (e: CustomEvent<IVolumeMeterEventDetail>) => {
+    // console.log("onSpeakingEvent -> ", e.detail);
+    if (!voiceDataRef.current.isSpeechStarted) {
+      console.log("onSpeakingEvent -> Speech started");
+      setStatus("recording");
       voiceDataRef.current.speechStart = e.detail.timestamp;
-      voiceDataRef.current.mode = "speechatart";
-    } else if (
-      voiceDataRef.current.mode === "speechatart" &&
-      e.type === "speaking"
-    ) {
-      voiceDataRef.current.mode = "speaking";
+      voiceDataRef.current.isSpeechStarted = true;
       voiceDataRef.current.speechItemsNum = 0;
-      voiceDataRef.current.speechItemsNum++;
-    } else if (
-      voiceDataRef.current.mode === "speechatart" &&
-      e.type === "silence"
-    ) {
-      voiceDataRef.current.mode = "speechend";
-    } else if (
-      voiceDataRef.current.mode === "speaking" &&
-      e.type === "speaking"
-    ) {
-      voiceDataRef.current.speechItemsNum++;
-    } else if (
-      voiceDataRef.current.mode === "speaking" &&
-      e.type === "silence"
-    ) {
-      voiceDataRef.current.speechEnd = e.detail.timestamp;
-      voiceDataRef.current.mode = "speechend";
-    } else if (
-      voiceDataRef.current.mode === "speechend" &&
-      e.type === "speaking"
-    ) {
-      voiceDataRef.current.mode = "speechatart";
-    } else if (
-      voiceDataRef.current.mode === "speechend" &&
-      e.type === "silence"
-    ) {
-      voiceDataRef.current.mode = "silence";
-      voiceDataRef.current.silenceItemsNum++;
-    } else if (
-      voiceDataRef.current.mode === "silence" &&
-      e.type === "silence"
-    ) {
-      voiceDataRef.current.silenceItemsNum++;
-    } else {
-      console.log(
-        "Unknown state! mode: ",
-        voiceDataRef.current.mode,
-        "event: ",
-        e.type
-      );
     }
-    // console.log("onVolumeEvent -> ", voiceDataRef.current);
+    voiceDataRef.current.silenceItemsNum = 0;
+    voiceDataRef.current.mode = "speaking";
+    ++voiceDataRef.current.speechItemsNum;
+    // TODO: Maybe do more...
+  };
+
+  const onSilenceEvent = (e: CustomEvent<IVolumeMeterEventDetail>) => {
+    // console.log("onSilenceEvent -> ", e.detail);
+    ++voiceDataRef.current.silenceItemsNum;
+
+    // Speech started and max post-speech silence time reached
+    if (
+      voiceDataRef.current.isSpeechStarted &&
+      voiceDataRef.current.silenceItemsNum >=
+        defaultVolumeConfig.detection_interval
+    ) {
+      // Speech not valid: Aborted
+      if (e.detail.duration < defaultVolumeConfig.min_speaking_duration) {
+        // TODO: Speech aboted
+        console.log("onSilenceEvent -> Speech aboted");
+      }
+      // Speech valid: Ended
+      else {
+        // TODO: Speech stopped
+        console.log("onSilenceEvent -> Speech stopped");
+        recorderPause();
+      }
+      console.log(
+        "onSilenceEvent -> Speech ended, silentItemsNum: ",
+        voiceDataRef.current.silenceItemsNum
+      );
+      voiceDataRef.current.isSpeechStarted = false;
+    }
   };
 
   useEffect(() => {
-    document.addEventListener("mute", onVolumeEvent as EventListener);
-    document.addEventListener("silence", onVolumeEvent as EventListener);
-    document.addEventListener("speaking", onVolumeEvent as EventListener);
+    document.addEventListener("mute", onMuteEvent as EventListener);
+    document.addEventListener("silence", onSilenceEvent as EventListener);
+    document.addEventListener("speaking", onSpeakingEvent as EventListener);
     const preSpeechTimer = setInterval(
       handlePreSpeechProcessing,
       props.time_interval
     );
     return () => {
       clearInterval(preSpeechTimer);
-      document.removeEventListener("mute", onVolumeEvent as EventListener);
-      document.removeEventListener("silence", onVolumeEvent as EventListener);
-      document.removeEventListener("speaking", onVolumeEvent as EventListener);
+      document.removeEventListener("mute", onMuteEvent as EventListener);
+      document.removeEventListener("silence", onSilenceEvent as EventListener);
+      document.removeEventListener(
+        "speaking",
+        onSpeakingEvent as EventListener
+      );
     };
   }, []);
-
-  useEffect(() => {
-    console.log(
-      "useEffect -> voiceDataRef.current.speechItemsNum: ",
-      voiceDataRef.current.speechItemsNum
-    );
-    if (
-      voiceDataRef.current.mode !== "speaking" &&
-      voiceDataRef.current.silenceItemsNum >=
-        defaultVolumeConfig.detection_interval /
-          defaultVolumeConfig.time_interval
-    ) {
-      console.log("useEffect -> recorderPause");
-      recorderPause();
-      voiceDataRef.current.silenceItemsNum = 0;
-    }
-  }, [voiceDataRef.current.silenceItemsNum]);
 
   const terminate = () => {
     sourceStop();
@@ -280,7 +238,10 @@ const useMicrophone = (
     });
     recorder.ondataavailable = (e) => {
       console.log("ondataavailable -> ", e.data);
-      setAudioChunks(() => [e.data]);
+      if (voiceDataRef.current.speechItemsNum > 0) {
+        voiceDataRef.current.speechItemsNum = 0;
+        setAudioChunks(() => [e.data]);
+      }
     };
     recorderRef.current = recorder;
 

@@ -13,7 +13,7 @@ const Microphone: React.FC = () => {
       <div>
         {audioUrl && (
           <>
-            <audio controls src={audioUrl} />
+            <audio controls autoPlay src={audioUrl} />
             <p>{audioUrl}</p>
           </>
         )}

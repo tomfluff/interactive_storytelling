@@ -1,3 +1,4 @@
+// Based on and inspired by: https://github.com/cwilso/volume-meter
 class VoiceMeterProcessor extends AudioWorkletProcessor {
 
   constructor(clipLevel, averaging, clipLag) {
