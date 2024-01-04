@@ -85,6 +85,9 @@ Our contributions are as follows:
 
 ## Implementation
 
+### Microphone integration
+Based on [WeBAD](https://github.com/solyarisoftware/WeBAD).
+
 ### Configuration (setup)
 Copy the `config.yml.example` file and add your own details.
 1. `cd backend`
