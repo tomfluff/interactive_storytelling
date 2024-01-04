@@ -6,6 +6,9 @@
       "dom.iterable",
       "esnext"
     ],
+    "types": [
+      "@types/audioworklet"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

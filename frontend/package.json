@@ -46,5 +46,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/audioworklet": "^0.0.53",
+    "zustand": "^4.4.7"
   }
 }
