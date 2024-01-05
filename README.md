@@ -107,11 +107,7 @@ Session is a data structure with an id and a list of story ids.
     "init_time": "initialization time",
     "last_update": "last update time",
     "curr_story": "story_id",
-    "stories": [
-        "story_id_1",
-        "story_id_2",
-        "story_id_3"
-    ]
+    "stories": "list of stories",
 }
 ```
 
@@ -120,24 +116,26 @@ Drawing is a data structure with an id and a list of story ids.
 ```json
 {
     "id": "drawing_id",
-    "name": "drawing_name",
-    "source": "url"/"file"/"camera",
+    "url": "file url",
+    "source": "url or file or camera",
+    "fullnae": "full nae of the character",
+    "shortname": "short name of the character",
     "description": "drawing_description",
-    "items": [
-        {
-            "name": "item_name",
-            "type": "item_type",
-            "is_new": true/false,
-            "is_active": true/false,
-        },
-    ],
-    "colors": [
-        {
-            "color": "color_1",
-            "usage": "color_1_usage"
-        },
-    ],
+    "items": ["item1", "item2", "item3"],
     "backstory": "drawing_backstory",
+}
+```
+
+#### Premimse DB structure
+Premise is a data structure with an id and information on a story premimse.
+```json
+{
+    "id": "premise_id",
+    "setting": "premise_setting",
+    "goal": "premise_goal",
+    "conflict": "premise_conflict",
+    "resolution": "premise_resolution",
+    "story": "first part of the story",
 }
 ```
 

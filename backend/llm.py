@@ -2,7 +2,7 @@ import json
 import logging
 import yaml
 import os
-import base64
+import requests
 
 from openai import OpenAI
 
@@ -56,12 +56,7 @@ class LLMStoryteller:
             {"role": "system", "content": "You are a helpful chatbot."},
             {"role": "user", "content": "Hello, who are you?"},
         ]
-        return self.send_llm_request(messages)
-
-    # Function to encode the image
-    def encode_image(self, image_path):
-        with open(image_path, "rb") as image_file:
-            return base64.b64encode(image_file.read()).decode("utf-8")
+        return self.send_chat_request(messages)
 
     def generate_story_image(self, prompt):
         response = self.llm().images.generate(
@@ -104,6 +99,15 @@ class LLMStoryteller:
         )
         return transcript.model_dump_json(indent=4)
 
+    def __get_json_data(self, datastr):
+        if datastr.strip().startswith("```json"):
+            return json.loads(datastr.split("```json")[1].split("```")[0])
+        elif datastr.strip().startswith("{"):
+            return json.loads(datastr)
+        else:
+            logger.error(f"Could not parse JSON data from string: '{datastr}'")
+            return None
+
     def __get_least_frequenct_word(self, story_part):
         # Get the least frequent word in the story part
         pass
@@ -120,95 +124,147 @@ class LLMStoryteller:
         # Check if the story should be finished
         pass
 
-    def get_story_from_drawing(self, drawing_path, json_content=True):
-        # Encode image to base64 and str to send to llm
-        base64_drawing = self.encode_image(drawing_path)
-        drawing_ulr = f"data:image/jpeg;base64,{base64_drawing}"
-        # Send drawing to llm
-        json_content = self.understand_drawing(drawing_ulr, json_content=json_content)
-        # Return the result
-        return json_content
+    def generate_premise(self, character):
+        # Generate a premise based on the given character
+        messages = [
+            {
+                "role": "system",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": """
+You are a helpful assistant. Help me generate a story premise for this character.
+0. Understand the input character, example: {"name": "Johnny the cat", "about": "A cat who loves tuna."}.
+1. Generate two different story premises for this character.
+2. Each premise should complete the following sentence: "Once upon a time...".
+3. For each premise include the following:
+    - A setting.
+    - A goal.
+    - A conflict.
+    - A resolution.
+4. Come up with the first paragraph of the story for each premise.
+    - The language should be simple and easy to understand.
+    - The paragraph should end with a cliffhanger.
+5. Return the premises as a JSON object with no styling and all in ascii characters.
 
-    def understand_drawing(self, drawing, json_content=True):
-        try:
-            messages = [
-                {
-                    "role": "system",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": "You are a helpful assistant. Help me understand these drawings.",
-                        },
-                        {
-                            "type": "text",
-                            "text": "For each drawing I send you, describe the content of the drawing.",
-                        },
-                        {
-                            "type": "text",
-                            "text": "Tell me what items are drawn, what colors are used, relationships are between items, and a make up a short backstory fit for children about the content of the drawing.",
-                        },
-                        {
-                            "type": "text",
-                            "text": "Return the information as a simplified JSON file with the following keys: 'description', 'items', 'colors', 'relationships', 'story'.",
-                        },
-                        {
-                            "type": "text",
-                            "text": "Remove all styling and line-beaks from the response and return plain text only.",
-                        },
-                        {
-                            "type": "text",
-                            "text": "Do not use apostrophes in the response content.",
-                        },
-                        {
-                            "type": "text",
-                            "text": "Here is such JSON file: {'description': 'A drawing of a cat and a dog.', 'items': ['cat', 'dog', 'food bowl', 'sun', 'window'], 'colors': [{'color':'black','usage':'the cat is black'}], 'relationships': {'cat': 'standing next to the food bowl'},'story': 'The cat and dog are fighting over the food in the bowl.'}",
-                        },
-                    ],
-                },
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": "Can you explain this drawing?"},
-                        {
-                            "type": "image_url",
-                            "image_url": {"url": drawing},
-                        },
-                    ],
-                },
-            ]
-            response = self.send_vision_request(messages)
-            if json_content:
-                return json.loads(response.strip().replace("'", '"'))
-            else:
-                return response
-        except Exception as e:
-            logger.error(e)
-            raise e
+Example JSON object:
+{
+    "list": [
+        {
+            "setting": "A kingdom in the sky.",
+            "goal": "To become a knight.",
+            "conflict": "The character is not a noble.",
+            "resolution": "The character becomes a knight by saving the princess.",
+            "story": "Once upon a time there was a knight who lived in a kingdom in the sky. He wanted to become a knight, but he was not a noble. He spent his days dreaming of becoming a knight. One day, he heard a knock on his door..."
+        },
+    ]
+}
+""",
+                    }
+                ],
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": str(character),
+                    },
+                ],
+            },
+        ]
+        return self.send_chat_request(messages)
+
+    def understand_drawing(self, drawing_url):
+        messages = [
+            {
+                "role": "system",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": """
+You are a helpful assistant. Help me understand the drawing in this photo.
+1. Describe the content of the drawing.
+2. Tell me what items are drawn.
+3. Come up with a name for the character in the drawing.
+4. Make up a short backstory about the character in the drawing, that inckudes the following:
+    - Who is this character?
+    - What are the dreams and goals of this character?
+    - What are the fears and worries of this character?
+    - What is the character's personality?
+5. Return the information as a JSON object using double quotes for keys and values.
+6. Reove all styling from the JSON object and make sure it is readable and in plain text.
+
+Here is an example JSON object: 
+{
+'fullname': 'Johnny the cat',
+'shortname': 'Johnny',
+'description': 'A drawing of a cat looking at a food bowl.', 
+'items': ['cat', 'food bowl', 'sun', 'window'],
+'colors': [{'color':'black','usage':'the cat is black'}], 
+'backstory': 'Johnny the cat loves tuna. He is always hungry and looking for food. He is a very friendly cat and loves to play with his toys.'
+}
+                        """,
+                    }
+                ],
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "image_url",
+                        "image_url": drawing_url,
+                    },
+                ],
+            },
+        ]
+        return self.send_vision_request(messages)
 
     def send_vision_request(self, request):
         try:
-            response = self.llm().chat.completions.create(
-                model=self.vmodel,
-                messages=request,
-                max_tokens=512,
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {config['openai']['key']}",
+                "OpenAI-Organization": f"{config['openai']['org']}",
+            }
+            payload = {
+                "model": self.vmodel,
+                "messages": request,
+                "max_tokens": 512,
+            }
+            response = requests.post(
+                "https://api.openai.com/v1/chat/completions",
+                headers=headers,
+                json=payload,
             )
             logger.debug(
                 f"Successfuly sent 'vision' LLM request with model={self.vmodel}"
             )
-            return response.choices[0].message.content
+
+            jresponse = response.json()
+            with open("vision.json", "w") as f:
+                json.dump(jresponse, f, indent=4)
+
+            return self.__get_json_data(jresponse["choices"][0]["message"]["content"])
         except Exception as e:
             logger.error(e)
             raise e
 
-    def send_llm_request(self, request):
+    def send_chat_request(self, request):
         try:
             response = self.llm().chat.completions.create(
                 model=self.model,
                 messages=request,
-                max_tokens=256,
+                response_format={"type": "json_object"},
+                max_tokens=512,
             )
             logger.debug(f"Successfuly sent 'chat' LLM request with model={self.model}")
-            return response.choices[0].message.content
+
+            jresponse = json.loads(response.model_dump_json(indent=4))
+            with open("chat.json", "w") as f:
+                json.dump(jresponse, f, indent=4)
+
+            return self.__get_json_data(jresponse["choices"][0]["message"]["content"])
         except Exception as e:
             logger.error(e)
             raise e
