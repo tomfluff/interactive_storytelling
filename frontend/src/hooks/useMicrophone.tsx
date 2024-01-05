@@ -1,10 +1,11 @@
-import { Details } from "@mui/icons-material";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+// Inspired by: https://github.com/solyarisoftware/webad
+//
+import { useEffect, useRef, useState } from "react";
 
 const defaultVoiceMeterConfig = {
+  clipLag: 750,
   clipLevel: 0.98,
   averaging: 0.95,
-  clipLag: 750,
 };
 
 const defaultVolumeConfig = {
@@ -12,9 +13,9 @@ const defaultVolumeConfig = {
   silence: 0.0001,
   speaking: 0.02,
   min_avg_speaking: 0.04,
-  min_speaking_duration: 500,
-  detection_interval: 500,
-  time_interval: 250,
+  min_speaking_duration: 750,
+  detection_interval: 250,
+  time_interval: 50,
 };
 
 const createAudioMeter = async (
@@ -51,17 +52,15 @@ interface IVoiceData {
   preSpeechItemsNum: number;
 }
 
-const useMicrophone = (
-  props: typeof defaultVolumeConfig = defaultVolumeConfig
-) => {
+const useMicrophone = () => {
   const [status, setStatus] = useState<TStatus>("stopped");
 
   const voiceDataRef = useRef<IVoiceData>({
     mode: "mute",
     isRecording: false,
     isSpeechStarted: false,
-    speechStart: -1,
-    speechEnd: -1,
+    speechStart: 0,
+    speechEnd: 0,
     speechItemsNum: 0,
     silenceItemsNum: 0,
     preSpeechItemsNum: 0,
@@ -71,6 +70,7 @@ const useMicrophone = (
   const meterRef = useRef<AudioWorkletNode | null>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
 
+  const [isClipping, setIsClipping] = useState<boolean>(false);
   const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
@@ -78,28 +78,29 @@ const useMicrophone = (
     ++voiceDataRef.current.preSpeechItemsNum;
     if (
       voiceDataRef.current.preSpeechItemsNum >=
-      defaultVolumeConfig.detection_interval / props.time_interval
+      defaultVolumeConfig.detection_interval / defaultVolumeConfig.time_interval
     ) {
       if (!voiceDataRef.current.isSpeechStarted) {
-        console.log(
-          "handlePreSpeechProcessing -> Restarting recorder, preSpeechItemsNum: ",
-          voiceDataRef.current.preSpeechItemsNum
-        );
         recorderRestart();
       }
       voiceDataRef.current.preSpeechItemsNum = 0;
     }
   };
 
+  /*
+   * Handle volume detection events and dispatch them to the DOM.
+   * Event handler for the port.onmessage event, from the AudioWorkletNode.
+   */
   const handleVolumeDetection = (volume: number) => {
     const detail: IVolumeMeterEventDetail = {
       volume: volume,
       timestamp: Date.now(),
       duration: Date.now() - voiceDataRef.current.speechStart,
     };
-    if (volume < props.mute) {
+
+    if (volume < defaultVolumeConfig.mute) {
       document.dispatchEvent(new CustomEvent("mute", { detail: detail }));
-    } else if (volume > props.speaking) {
+    } else if (volume > defaultVolumeConfig.speaking) {
       document.dispatchEvent(new CustomEvent("speaking", { detail: detail }));
     } else {
       document.dispatchEvent(new CustomEvent("silence", { detail: detail }));
@@ -175,19 +176,13 @@ const useMicrophone = (
     ) {
       // Speech not valid: Aborted
       if (e.detail.duration < defaultVolumeConfig.min_speaking_duration) {
-        // TODO: Speech aboted
-        console.log("onSilenceEvent -> Speech aboted");
+        voiceDataRef.current.speechItemsNum = 0;
+        recorderRestart();
       }
       // Speech valid: Ended
       else {
-        // TODO: Speech stopped
-        console.log("onSilenceEvent -> Speech stopped");
         recorderPause();
       }
-      console.log(
-        "onSilenceEvent -> Speech ended, silentItemsNum: ",
-        voiceDataRef.current.silenceItemsNum
-      );
       voiceDataRef.current.isSpeechStarted = false;
     }
   };
@@ -198,7 +193,7 @@ const useMicrophone = (
     document.addEventListener("speaking", onSpeakingEvent as EventListener);
     const preSpeechTimer = setInterval(
       handlePreSpeechProcessing,
-      props.time_interval
+      defaultVolumeConfig.time_interval
     );
     return () => {
       clearInterval(preSpeechTimer);
@@ -215,8 +210,6 @@ const useMicrophone = (
     sourceStop();
     meterStop();
     recorderStop();
-    setAudioUrl(null);
-    setAudioChunks([]);
   };
 
   const initialize = async () => {
@@ -237,10 +230,12 @@ const useMicrophone = (
       mimeType: "audio/webm",
     });
     recorder.ondataavailable = (e) => {
-      console.log("ondataavailable -> ", e.data);
       if (voiceDataRef.current.speechItemsNum > 0) {
         voiceDataRef.current.speechItemsNum = 0;
         setAudioChunks(() => [e.data]);
+        setAudioUrl(
+          URL.createObjectURL(new Blob([e.data], { type: "audio/webm" }))
+        );
       }
     };
     recorderRef.current = recorder;
@@ -249,6 +244,7 @@ const useMicrophone = (
       source.connect(meter);
       meter.port.onmessage = (e) => {
         handleVolumeDetection(e.data.volume);
+        setIsClipping(e.data.clipping);
       };
     }
   };
@@ -261,18 +257,13 @@ const useMicrophone = (
 
   const start = () => {
     if (status === "listening" || status === "recording") return;
+    setAudioUrl(null);
+    setAudioChunks([]);
     initialize();
     setStatus("listening");
   };
 
-  useEffect(() => {
-    if (audioChunks.length > 0)
-      setAudioUrl(
-        URL.createObjectURL(new Blob(audioChunks, { type: "audio/wav" }))
-      );
-  }, [audioChunks]);
-
-  return { status, audioUrl, start, stop };
+  return { status, audioUrl, audioChunks, start, stop };
 };
 
 export default useMicrophone;

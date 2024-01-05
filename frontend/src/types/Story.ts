@@ -1,6 +1,15 @@
 import { TDrawing } from "./Drawing";
 import { TEntity } from "./Entity";
 
+export type TPremise = {
+  id: number;
+  setting: string;
+  goal: string;
+  conflict: string;
+  resolution: string;
+  story: string;
+};
+
 export type TAnalytics = {
   entities: TEntity[];
   intensity: string;
@@ -29,5 +38,6 @@ export type TStory = {
   id: string;
   drawing: TDrawing;
   init_time: string;
+  premise: TPremise;
   parts: TStoryPart[];
 };

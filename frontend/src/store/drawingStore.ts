@@ -3,24 +3,27 @@ import { devtools, subscribeWithSelector } from "zustand/middleware";
 import { createSelectors } from "../utils/createSelectors";
 import { TDrawing } from "../types/Drawing";
 
-const initialDrawingState: TDrawing[] = [];
+const initialDrawingState = {
+  drawing: null as TDrawing | null,
+  archive: [] as TDrawing[],
+};
 
 export const useDrawingStore = createSelectors(
-  create<TDrawing[]>()(
+  create<typeof initialDrawingState>()(
     devtools((set, get) => initialDrawingState, {
       name: "drawing",
     })
   )
 );
 
-export const resetDrawings = () => {
-  useDrawingStore.setState(initialDrawingState);
-};
-
-export const addDrawing = (drawing: TDrawing) => {
-  useDrawingStore.setState((state) => [...state, drawing]);
-};
-
-export const getDrawing = (id: string) => {
-  return useDrawingStore((state) => state.find((d) => d.id === id));
+export const setDrawing = (drawing: TDrawing) => {
+  useDrawingStore.setState((state) => {
+    if (state.drawing) {
+      state.archive.push(state.drawing);
+    }
+    return {
+      ...state,
+      drawing,
+    };
+  });
 };
