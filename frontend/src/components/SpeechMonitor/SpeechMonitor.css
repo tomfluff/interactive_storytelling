@@ -1,0 +1,10 @@
+.microphone-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.microphone-button {
+  border: 2px solid;
+  border-radius: 50%;
+}
