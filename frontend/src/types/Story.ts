@@ -1,17 +1,6 @@
 import { TDrawing } from "./Drawing";
 import { TEntity } from "./Entity";
-
-export type TPremise = {
-  id: number;
-  setting: {
-    long: string;
-    short: string;
-  };
-  goal: string;
-  conflict: string;
-  resolution: string;
-  story: string;
-};
+import { TPremise } from "./Premise";
 
 export type TAnalytics = {
   entities: TEntity[];
