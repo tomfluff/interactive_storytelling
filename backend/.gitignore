@@ -5,6 +5,14 @@ test.py
 drawing.*
 transcript.*
 .data/
+chat.json
+fchat.json
+vision.json
+uploads/*
+!uploads/knight.png
+!uploads/superhero.jpeg
+/jsons/*
+/.tmp/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
