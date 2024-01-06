@@ -1,6 +1,21 @@
-// Inspired by: https://github.com/solyarisoftware/webad
-//
-import { useEffect, useRef, useState } from "react";
+/* (Inspired by: https://github.com/solyarisoftware/webad)
+ *
+ * This hook is used to record audio from the microphone.
+ * It uses the MediaRecorder API to record the audio.
+ * The audio is recorded as soon as the user starts speaking.
+ * The recording stops when the user stops speaking.
+ * The recording is then stored in the audioChunks state.
+ *
+ * status: "stopped" | "listening" | "recording"
+ * isClipping: boolean, true if the audio is clipping (too loud)
+ *
+ * Usage example:
+ * const { status, isClipping, audioChunks, start, stop, halt, resume } = useMicrophone();
+ * <button onClick={start}>Start</button>
+ * <button onClick={stop}>Stop</button>
+ *
+ */
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const defaultVoiceMeterConfig = {
   clipLag: 750,
@@ -45,6 +60,7 @@ interface IVoiceData {
   mode: TMode;
   isRecording: boolean;
   isSpeechStarted: boolean;
+  isEnabled: boolean;
   speechStart: number;
   speechEnd: number;
   speechItemsNum: number;
@@ -59,6 +75,7 @@ const useMicrophone = () => {
     mode: "mute",
     isRecording: false,
     isSpeechStarted: false,
+    isEnabled: false,
     speechStart: 0,
     speechEnd: 0,
     speechItemsNum: 0,
@@ -69,10 +86,8 @@ const useMicrophone = () => {
   const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const meterRef = useRef<AudioWorkletNode | null>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
-
-  const [isClipping, setIsClipping] = useState<boolean>(false);
   const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [isClipping, setIsClipping] = useState(false);
 
   const handlePreSpeechProcessing = () => {
     ++voiceDataRef.current.preSpeechItemsNum;
@@ -92,6 +107,8 @@ const useMicrophone = () => {
    * Event handler for the port.onmessage event, from the AudioWorkletNode.
    */
   const handleVolumeDetection = (volume: number) => {
+    if (!voiceDataRef.current.isEnabled) return;
+
     const detail: IVolumeMeterEventDetail = {
       volume: volume,
       timestamp: Date.now(),
@@ -210,6 +227,7 @@ const useMicrophone = () => {
     sourceStop();
     meterStop();
     recorderStop();
+    voiceDataRef.current.isEnabled = false;
   };
 
   const initialize = async () => {
@@ -233,9 +251,6 @@ const useMicrophone = () => {
       if (voiceDataRef.current.speechItemsNum > 0) {
         voiceDataRef.current.speechItemsNum = 0;
         setAudioChunks(() => [e.data]);
-        setAudioUrl(
-          URL.createObjectURL(new Blob([e.data], { type: "audio/webm" }))
-        );
       }
     };
     recorderRef.current = recorder;
@@ -247,6 +262,16 @@ const useMicrophone = () => {
         setIsClipping(e.data.clipping);
       };
     }
+
+    voiceDataRef.current.isEnabled = true;
+  };
+
+  const halt = () => {
+    voiceDataRef.current.isEnabled = false;
+  };
+
+  const resume = () => {
+    voiceDataRef.current.isEnabled = true;
   };
 
   const stop = () => {
@@ -256,14 +281,14 @@ const useMicrophone = () => {
   };
 
   const start = () => {
-    if (status === "listening" || status === "recording") return;
-    setAudioUrl(null);
+    if (status !== "stopped") return;
     setAudioChunks([]);
+    setIsClipping(false);
     initialize();
     setStatus("listening");
   };
 
-  return { status, audioUrl, audioChunks, start, stop };
+  return { status, isClipping, audioChunks, start, stop, halt, resume };
 };
 
 export default useMicrophone;

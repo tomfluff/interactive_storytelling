@@ -1,5 +1,15 @@
+/*
+ * Custom hook to fetch premise from backend.
+ * It gets the promise list for the given drawing.
+ * The premise list is stored in the 'data' field and can be accessed.
+ *
+ * Usage example:
+ * const { isLoading, error, data, fetchPremise } = useFetchPremise();
+ * fetchPremise(drawing); // drawing is a TDrawing type
+ *
+ */
+
 import { useState, useEffect } from "react";
-import { useDrawingStore, setDrawing } from "../store/drawingStore";
 import { TDrawing } from "../types/Drawing";
 import { TPremise } from "../types/Story";
 

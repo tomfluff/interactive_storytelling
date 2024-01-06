@@ -1,3 +1,13 @@
+/*
+ * Custom hook to use webcam and capture content.
+ * It returns the webcamRef and the base64Capture.
+ *
+ * Usage example:
+ * const { webcamRef, base64Capture, captureWebcam } = useWebcam();
+ * <Webcam ref={webcamRef} />
+ * <button onClick={() => captureWebcam()}>Capture</button>
+ *
+ */
 import { useCallback, useRef, useState } from "react";
 import Webcam from "react-webcam";
 
@@ -6,14 +16,18 @@ const useWebcam = () => {
   const [base64Capture, setBase64Capture] = useState<string | null>(null);
 
   // Capture photo from webcam
-  const captureWebcam = useCallback(() => {
+  const capture = useCallback(() => {
     if (webcamRef.current) {
       const captured = webcamRef.current.getScreenshot();
       setBase64Capture(captured);
     }
   }, [webcamRef]);
 
-  return { webcamRef, base64Capture, captureWebcam };
+  const clear = useCallback(() => {
+    setBase64Capture(null);
+  }, []);
+
+  return { webcamRef, base64Capture, capture, clear };
 };
 
 export default useWebcam;
