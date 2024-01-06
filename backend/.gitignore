@@ -12,7 +12,7 @@ uploads/*
 !uploads/knight.png
 !uploads/superhero.jpeg
 /jsons/*
-/.tmp/*
+/.tmp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
