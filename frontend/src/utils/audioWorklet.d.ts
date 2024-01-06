@@ -6,6 +6,8 @@
 // See: https://github.com/microsoft/TypeScript/issues/28308#issuecomment-1512509870
 // ------
 
+// UPDATE 2024-01-06: File is not needed anymore, but I'm keeping it here for reference. [Yotam]
+
 interface AudioParamDescriptor {
   name: string;
   defaultValue?: number;
