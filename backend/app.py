@@ -111,7 +111,7 @@ def get_drawing(filename):
 
 
 @app.route("/api/drawing", methods=["POST"])
-def upload_drawing():
+def upload_and_analyze_drawing():
     """
     Upload a drawing and return the drawing analysis.
     """
@@ -167,7 +167,7 @@ def upload_drawing():
 
 
 @app.route("/api/premise", methods=["POST"])
-def get_premise():
+def generate_preise_options():
     """
     Get the premise choices for the drawing.
     """
@@ -207,32 +207,40 @@ def read_text():
         print(f"Time taken: {time.time() - t0}")
 
 
-# -----------------------
-#
-#
-#
-#
-#
-# NOTE: I don't think this is needed, I think we have all the data attached to the session [Yotam]
-@app.route("/api/story/<story_id>", methods=["GET"])
-def get_story(story_id):
+@app.route("/api/story", methods=["GET"])
+def get_new_story():
     """
-    Get the story with the given id.
+    Generate a new blank story.
     """
     try:
         # Load configurations from config.yml
         with open("config.yml", "r") as f:
             config = yaml.safe_load(f)
-        # Create a json file with the session id
-        json_file = os.path.join(config["app"]["json_folder"], f"{story_id}.json")
-        with open(json_file, "r") as f:
-            data = json.load(f)
-        # Return the session id
-        return jsonify(data), 200
+
+        return (
+            jsonify(
+                {
+                    "id": uuid.uuid4(),
+                    "init_time": time.time(),
+                    "parts": [],
+                }
+            ),
+            200,
+        )
     except FileNotFoundError:
-        return jsonify({"error": "Story not found"}), 404
+        return jsonify({"error": "Session not found"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/story", methods=["POST"])
+def get_story_from_context():
+    """
+    Generate a story part from the given context.
+    Context can have the drawing, a premise, the story so far, etc.
+    Should generate a story part and return it.
+    """
+    pass
 
 
 if __name__ == "__main__":

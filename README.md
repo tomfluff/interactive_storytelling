@@ -99,6 +99,8 @@ General concept for data structures. This is not the final structure, but a gene
 Current approach is to use a local JSON file as a database for simmplicity.
 In actuality we impleemnt a **siplified version** of the DB structure with partial data.
 
+NOTE: For ost updated structures please refer to `frontend/src/types` folder.
+
 #### Session DB structure
 Session is a data structure with an id and a list of story ids.
 ```json

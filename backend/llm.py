@@ -149,10 +149,7 @@ You are a helpful assistant. Help me generate a story premise for this character
     - A goal.
     - A conflict.
     - A resolution.
-4. Come up with the first paragraph of the story for each premise.
-    - The language should be simple and easy to understand.
-    - The paragraph should end with a cliffhanger.
-5. Return the premises as a JSON object with no styling and all in ascii characters.
+4. Return the premises as a JSON object with no styling and all in ascii characters.
 
 Example JSON object:
 {
@@ -162,7 +159,6 @@ Example JSON object:
             "goal": "To become a knight.",
             "conflict": "The character is not a noble.",
             "resolution": "The character becomes a knight by saving the princess.",
-            "story": "Once upon a time there was a knight who lived in a kingdom in the sky. He wanted to become a knight, but he was not a noble. He spent his days dreaming of becoming a knight. One day, he heard a knock on his door..."
         },
     ]
 }
