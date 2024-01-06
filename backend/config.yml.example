@@ -2,15 +2,17 @@ openai:
   key: YOUR_OPENAI_KEY
   org: YOUR_OPENAI_ORG
   model: gpt-4-1106-preview
+  fmodel: gpt-3.5-turbo-1106
   vmodel: gpt-4-vision-preview
   vgen: dall-e-3
-  tts: null
+  tts: tts-1
   stt: whisper-1
 
 app:
   debug: true
   logger: true
   image_generation: true
+  temp_folder: ".tmp"
   upload_folder: "uploads"
   json_folder: "jsons"
   allowed_extensions: ["png", "jpg", "jpeg", "gif"]
