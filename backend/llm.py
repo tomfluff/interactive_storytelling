@@ -1,5 +1,6 @@
 import json
 import logging
+import time
 import yaml
 import os
 import requests
@@ -38,11 +39,13 @@ class LLMStoryteller:
     def __init__(self) -> None:
         if config["llm"]["type"] == "openai":
             self.llm = OpenAILLM()
-            self.model = config["openai"]["model"]
-            self.vmodel = config["openai"]["vmodel"]
-            self.vgen = config["openai"]["vgen"]
-            self.stt = config["openai"]["stt"]
-            self.tts = config["openai"]["tts"]
+            self.model = config["openai"]["model"]  # gpt-4
+            self.fmodel = config["openai"]["fmodel"]  # gpt-3.5
+            self.vmodel = config["openai"]["vmodel"]  # gpt-4 vision
+            self.vgen = config["openai"]["vgen"]  # dalle-2
+            self.stt = config["openai"]["stt"]  # whisper
+            self.tts = config["openai"]["tts"]  # tts-hd
+
             self.upload_folder = config["app"]["upload_folder"]
             logger.info(f"LLM storyteller initialized with model={self.model}")
         else:
@@ -100,13 +103,17 @@ class LLMStoryteller:
         return transcript.model_dump_json(indent=4)
 
     def __get_json_data(self, datastr):
-        if datastr.strip().startswith("```json"):
-            return json.loads(datastr.split("```json")[1].split("```")[0])
-        elif datastr.strip().startswith("{"):
-            return json.loads(datastr)
-        else:
-            logger.error(f"Could not parse JSON data from string: '{datastr}'")
-            return None
+        try:
+            if datastr.strip().startswith("```json"):
+                return json.loads(datastr.split("```json")[1].split("```")[0])
+            elif datastr.strip().startswith("{"):
+                return json.loads(datastr)
+            else:
+                raise Exception("Could not parse JSON data from string")
+        except Exception as e:
+            logger.error(e)
+        finally:
+            logger.info(f"Data string: '{datastr}'")
 
     def __get_least_frequenct_word(self, story_part):
         # Get the least frequent word in the story part
@@ -151,7 +158,7 @@ Example JSON object:
 {
     "list": [
         {
-            "setting": "A kingdom in the sky.",
+            "setting": {"long":"A kingdom in the sky.","short": "Sky kingdom"},
             "goal": "To become a knight.",
             "conflict": "The character is not a noble.",
             "resolution": "The character becomes a knight by saving the princess.",
@@ -173,7 +180,8 @@ Example JSON object:
                 ],
             },
         ]
-        return self.send_chat_request(messages)
+        data = self.send_fast_request(messages)
+        return self.__get_json_data(data)
 
     def understand_drawing(self, drawing_url):
         messages = [
@@ -197,12 +205,18 @@ You are a helpful assistant. Help me understand the drawing in this photo.
 
 Here is an example JSON object: 
 {
-'fullname': 'Johnny the cat',
-'shortname': 'Johnny',
-'description': 'A drawing of a cat looking at a food bowl.', 
 'items': ['cat', 'food bowl', 'sun', 'window'],
+'description': 'A drawing of a cat looking at a food bowl.', 
 'colors': [{'color':'black','usage':'the cat is black'}], 
-'backstory': 'Johnny the cat loves tuna. He is always hungry and looking for food. He is a very friendly cat and loves to play with his toys.'
+'character': {
+    'fullname': 'Johnny the cat',
+    'shortname': 'Johnny',
+    'likes': ['tuna', 'playing with toys'],
+    'dislikes': ['dogs', 'water'],
+    'fears': ['dogs', 'water'],
+    'personality': ['friendly', 'hungry'],
+    'backstory': 'Johnny the cat loves tuna. He is always hungry and looking for food. He is a very friendly cat and loves to play with his toys.',
+    }
 }
                         """,
                     }
@@ -218,7 +232,8 @@ Here is an example JSON object:
                 ],
             },
         ]
-        return self.send_vision_request(messages)
+        data = self.send_vision_request(messages)
+        return self.__get_json_data(data)
 
     def send_vision_request(self, request):
         try:
@@ -230,7 +245,7 @@ Here is an example JSON object:
             payload = {
                 "model": self.vmodel,
                 "messages": request,
-                "max_tokens": 512,
+                "max_tokens": 1024,
             }
             response = requests.post(
                 "https://api.openai.com/v1/chat/completions",
@@ -245,7 +260,7 @@ Here is an example JSON object:
             with open("vision.json", "w") as f:
                 json.dump(jresponse, f, indent=4)
 
-            return self.__get_json_data(jresponse["choices"][0]["message"]["content"])
+            return jresponse["choices"][0]["message"]["content"]
         except Exception as e:
             logger.error(e)
             raise e
@@ -256,15 +271,77 @@ Here is an example JSON object:
                 model=self.model,
                 messages=request,
                 response_format={"type": "json_object"},
-                max_tokens=512,
+                max_tokens=1024,
             )
             logger.debug(f"Successfuly sent 'chat' LLM request with model={self.model}")
 
-            jresponse = json.loads(response.model_dump_json(indent=4))
+            jresponse = json.loads(response.model_dump_json())
             with open("chat.json", "w") as f:
                 json.dump(jresponse, f, indent=4)
 
-            return self.__get_json_data(jresponse["choices"][0]["message"]["content"])
+            return jresponse["choices"][0]["message"]["content"]
         except Exception as e:
             logger.error(e)
             raise e
+
+    def send_fast_request(self, request):
+        try:
+            response = self.llm().chat.completions.create(
+                model=self.fmodel,
+                messages=request,
+                max_tokens=1024,
+            )
+            logger.debug(
+                f"Successfuly sent 'fact chat' LLM request with model={self.fmodel}"
+            )
+
+            jresponse = json.loads(response.model_dump_json())
+            with open("fchat.json", "w") as f:
+                json.dump(jresponse, f, indent=4)
+
+            return jresponse["choices"][0]["message"]["content"]
+        except Exception as e:
+            logger.error(e)
+            raise e
+
+    def send_image_request(self, request):
+        try:
+            response = self.llm().images.create(
+                model=self.vgen,
+                prompt=request,
+                size="1024x1024",
+                quality="standard",
+                n=1,
+            )
+            logger.debug(f"Successfuly sent 'image' LLM request with model={self.vgen}")
+
+            image_url = response.data[0].url
+            return image_url
+        except Exception as e:
+            logger.error(e)
+            raise e
+
+    def send_speech_request(self, text):
+        # Based on this answer: https://github.com/openai/openai-python/issues/864#issuecomment-1872681672
+        url = "https://api.openai.com/v1/audio/speech"
+        headers = {
+            "Authorization": f"Bearer {config['openai']['key']}",
+            "OpenAI-Organization": f"{config['openai']['org']}",
+        }
+        data = {
+            "model": self.tts,
+            "input": text,
+            "voice": "echo",
+            "response_format": "mp3",
+        }
+
+        with requests.post(url, headers=headers, json=data, stream=True) as response:
+            if response.status_code == 200:
+                logger.debug(
+                    f"Successfuly sent 'speech' LLM request with model={self.tts}"
+                )
+                for chunk in response.iter_content(chunk_size=8192):
+                    yield chunk
+
+    def send_voice_request(self, input):
+        pass

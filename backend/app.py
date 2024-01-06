@@ -1,18 +1,17 @@
+import tempfile
 import json
 import sys
 import time
 import yaml
 import os
 from llm import LLMStoryteller
-from flask import Flask, jsonify, request, send_file
+from flask import Flask, jsonify, request, send_file, Response, stream_with_context
 from flask_cors import CORS
 import uuid
 
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils import base64_image_url, save_base64_image, check_allowed_ext
-
-session_id = "test_id"  # TODO: Replace with real session id
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -35,7 +34,7 @@ def new_session():
             config = yaml.safe_load(f)
         # Create a session id
         session = {
-            "session_id": uuid.uuid4(),
+            "id": uuid.uuid4(),
             "init_time": time.time(),
         }
         # Return the session
@@ -181,11 +180,39 @@ def get_premise():
         # Get the premise choices
         llm = LLMStoryteller()
         premise = llm.generate_premise(character)
+        if not premise:
+            return (
+                jsonify({"error": f"Failed to generate premise."}),
+                500,
+            )
         return jsonify([{"id": i, **p} for i, p in enumerate(premise["list"])]), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/api/read", methods=["POST"])
+def read_text():
+    t0 = time.time()
+    try:
+        data = request.get_json()
+        llm = LLMStoryteller()
+        return Response(
+            stream_with_context(llm.send_speech_request(data["text"])),
+            mimetype="audio/mp3",
+        )
+    except Exception as e:
+        print(e)
+        return jsonify({"error": str(e)}), 500
+    finally:
+        print(f"Time taken: {time.time() - t0}")
+
+
+# -----------------------
+#
+#
+#
+#
+#
 # NOTE: I don't think this is needed, I think we have all the data attached to the session [Yotam]
 @app.route("/api/story/<story_id>", methods=["GET"])
 def get_story(story_id):
@@ -216,6 +243,8 @@ if __name__ == "__main__":
     # Verify that the config file is valid
     assert config["app"]["debug"], "debug key not found in config.yml"
     assert type(config["app"]["debug"]) == bool, "debug key must be a boolean"
+
+    tempfile.tempdir = config["app"]["temp_folder"]
 
     # Start the Flask server
     app.run(debug=config["app"]["debug"])
