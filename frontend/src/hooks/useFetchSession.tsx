@@ -12,6 +12,7 @@ const useFetchSession = () => {
     if (!response.ok) throw new Error("Failed to get session");
     const session = await response.json();
     setSession(session);
+    setIsFetch(false);
     return session;
   }, [isFetch]);
 

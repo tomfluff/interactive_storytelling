@@ -24,9 +24,11 @@ export const setSession = (session: TSession) => {
   useSessionStore.setState(session);
 };
 
-export const addNewStory = (story: TStory) => {
+export const addStory = (story: TStory) => {
+  const idx = useSessionStore.getState().stories.length;
   useSessionStore.setState((state) => ({
     ...state,
+    curr_story: idx,
     stories: [...state.stories, story],
   }));
 };

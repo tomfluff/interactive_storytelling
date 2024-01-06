@@ -10,16 +10,17 @@
  */
 
 import { useState, useEffect } from "react";
-import { TDrawing } from "../types/Drawing";
-import { TPremise } from "../types/Story";
+import { TCharacter, TDrawing } from "../types/Drawing";
+import { TPremise } from "../types/Premise";
 
 const useFetchPremise = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>("");
   const [data, setData] = useState<TPremise[] | null>(null);
 
-  const fetchPremise = async (drawing: TDrawing) => {
-    if (!drawing) return;
+  const fetchPremise = async (character: TCharacter) => {
+    if (!character) return;
+    if (isLoading) return;
 
     setIsLoading(true);
     setError("");
@@ -27,7 +28,7 @@ const useFetchPremise = () => {
       // Make API call to upload drawing to the backend
       const response = await fetch("/api/premise", {
         method: "POST",
-        body: JSON.stringify(drawing),
+        body: JSON.stringify(character),
         headers: {
           "Content-Type": "application/json",
         },
