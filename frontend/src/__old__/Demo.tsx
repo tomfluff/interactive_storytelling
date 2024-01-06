@@ -31,7 +31,7 @@ function Demo() {
 
   useEffect(() => {
     if (drawingData) {
-      fetchPremise(drawingData);
+      fetchPremise(drawingData.character);
     }
   }, [drawingData]);
 
