@@ -1,0 +1,40 @@
+:root {
+  --webcam-size: 80vh;
+}
+
+.drawing-scan-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 30vh;
+  width: 30vh;
+}
+
+.drawing-scan-container {
+  width: var(--webcam-size);
+  align-items: center;
+  justify-content: center;
+}
+
+.drawing-scan-webcam {
+  margin-bottom: 1em;
+  justify-content: center;
+}
+
+.drawing-scan-webcam video,
+.drawing-scan-webcam img {
+  border-radius: 2vh;
+  overflow: hidden;
+  width: var(--webcam-size);
+}
+
+.drawing-scan-webcam video {
+  padding: 1px;
+}
+
+.drawing-scan-webcam img {
+  position: absolute;
+  margin-left: -1px;
+  border: 2px solid #2196f3;
+}
