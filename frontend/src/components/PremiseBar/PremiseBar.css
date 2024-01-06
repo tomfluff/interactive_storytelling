@@ -1,0 +1,13 @@
+.premise-selection {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.premise-content {
+    padding-left: 10px;
+    font-style: italic;
+    font-family: 'Times New Roman', Times, serif;
+    color: #555;
+    margin: 10px 0;
+}
