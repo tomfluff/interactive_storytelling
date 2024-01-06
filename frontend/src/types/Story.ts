@@ -3,7 +3,10 @@ import { TEntity } from "./Entity";
 
 export type TPremise = {
   id: number;
-  setting: string;
+  setting: {
+    long: string;
+    short: string;
+  };
   goal: string;
   conflict: string;
   resolution: string;

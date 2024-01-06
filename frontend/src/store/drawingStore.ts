@@ -16,6 +16,18 @@ export const useDrawingStore = createSelectors(
   )
 );
 
+export const clearDrawing = () => {
+  useDrawingStore.setState((state) => {
+    if (state.drawing) {
+      state.archive.push(state.drawing);
+    }
+    return {
+      ...state,
+      drawing: null,
+    };
+  });
+};
+
 export const setDrawing = (drawing: TDrawing) => {
   useDrawingStore.setState((state) => {
     if (state.drawing) {

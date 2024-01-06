@@ -118,11 +118,17 @@ Drawing is a data structure with an id and a list of story ids.
     "id": "drawing_id",
     "url": "file url",
     "source": "url or file or camera",
-    "fullnae": "full nae of the character",
-    "shortname": "short name of the character",
     "description": "drawing_description",
     "items": ["item1", "item2", "item3"],
-    "backstory": "drawing_backstory",
+    "character": {
+        "fullname": "full nae of the character",
+        "shortname": "short name of the character",
+        "likes": ["like1", "like2", "like3"],
+        "dislikes": ["dislike1", "dislike2", "dislike3"],
+        "fears": ["fear1", "fear2", "fear3"],
+        "personality": ["personality1", "personality2", "personality3"],
+        "backstory": "drawing_backstory",
+    }
 }
 ```
 

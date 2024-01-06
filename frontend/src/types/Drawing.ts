@@ -1,10 +1,4 @@
 // NOTE: This is not currently used
-export type TColorUsage = {
-  color: string;
-  usage: number;
-};
-
-// NOTE: This is not currently used
 // Maybe in the future we will set the bounbdiung box of the drawing
 export type TBoundingBox = {
   x: number;
@@ -13,13 +7,27 @@ export type TBoundingBox = {
   height: number;
 };
 
+export type TColorUsage = {
+  color: string;
+  usage: number;
+};
+
+export type TCharacter = {
+  fullname: string;
+  shortname: string;
+  likes: string[];
+  dislikes: string[];
+  fears: string[];
+  personality: string[];
+  backstory: string;
+};
+
 export type TDrawing = {
   id: string;
   url?: string;
   source: "url" | "file" | "camera";
-  fullname: string;
-  shortname: string;
   description: string;
   items: string[];
-  backstory: string;
+  colors: TColorUsage[];
+  character: TCharacter;
 };
