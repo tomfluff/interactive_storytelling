@@ -72,8 +72,8 @@ class LLMStoryteller:
         image_url = response.data[0].url
         return image_url
 
-    def generate_story_part(self, prompt):
-        # Send LLM request to generate a story based on the given prompt
+    def generate_story_parts(self, context):
+        # Send LLM request to generate a story part from the given context.
         pass
 
     def generate_action_choices(self, story):
@@ -140,29 +140,31 @@ class LLMStoryteller:
                     {
                         "type": "text",
                         "text": """
-You are a helpful assistant. Help me generate a story premise for this character.
-0. Understand the input character, example: {"name": "Johnny the cat", "about": "A cat who loves tuna."}.
-1. Generate two different story premises for this character.
-2. Each premise should complete the following sentence: "Once upon a time...".
-3. For each premise include the following:
-    - A setting.
-    - A goal.
-    - A conflict.
-    - A resolution.
-4. Return the premises as a JSON object with no styling and all in ascii characters.
-
-Example JSON object:
-{
-    "list": [
-        {
-            "setting": {"long":"A kingdom in the sky.","short": "Sky kingdom"},
-            "goal": "To become a knight.",
-            "conflict": "The character is not a noble.",
-            "resolution": "The character becomes a knight by saving the princess.",
-        },
-    ]
-}
-""",
+                        You are a helpful assistant. Help me generate a story premise for this character.
+                        0. Understand the input character, example: {"name": "Johnny the cat", "about": "A cat who loves tuna."}.
+                        1. Generate two different story premises for this character.
+                        2. Each premise should have the beginning of a sory that completes the following sentence: "Once upon a time...".
+                        3. For each premise include the following:
+                            - A setting.
+                            - A goal.
+                            - A conflict.
+                            - A resolution.
+                            - A story
+                        4. Return the list as a JSON object with no styling and all in ascii characters.
+                        
+                        Example JSON object:
+                        {
+                            "list": [
+                                {
+                                    "setting": {"long":"A kingdom in the sky.","short": "Sky kingdom"},
+                                    "goal": "To become a knight.",
+                                    "conflict": "The character is not a noble.",
+                                    "resolution": "The character becomes a knight by saving the princess.",
+                                    "story": "Once upon a time, high above the clouds in the Sky Kingdom, there was a kind person who wanted to become a knight.",
+                                },
+                            ]
+                        }
+                        """,
                     }
                 ],
             },
@@ -187,33 +189,33 @@ Example JSON object:
                     {
                         "type": "text",
                         "text": """
-You are a helpful assistant. Help me understand the drawing in this photo.
-1. Describe the content of the drawing.
-2. Tell me what items are drawn.
-3. Come up with a name for the character in the drawing.
-4. Make up a short backstory about the character in the drawing, that inckudes the following:
-    - Who is this character?
-    - What are the dreams and goals of this character?
-    - What are the fears and worries of this character?
-    - What is the character's personality?
-5. Return the information as a JSON object using double quotes for keys and values.
-6. Reove all styling from the JSON object and make sure it is readable and in plain text.
-
-Here is an example JSON object: 
-{
-'items': ['cat', 'food bowl', 'sun', 'window'],
-'description': 'A drawing of a cat looking at a food bowl.', 
-'colors': [{'color':'black','usage':'the cat is black'}], 
-'character': {
-    'fullname': 'Johnny the cat',
-    'shortname': 'Johnny',
-    'likes': ['tuna', 'playing with toys'],
-    'dislikes': ['dogs', 'water'],
-    'fears': ['dogs', 'water'],
-    'personality': ['friendly', 'hungry'],
-    'backstory': 'Johnny the cat loves tuna. He is always hungry and looking for food. He is a very friendly cat and loves to play with his toys.',
-    }
-}
+                        You are a helpful assistant. Help me understand the drawing in this photo.
+                        1. Describe the content of the drawing.
+                        2. Tell me what items are drawn.
+                        3. Come up with a name for the character in the drawing.
+                        4. Make up a short backstory about the character in the drawing, that inckudes the following:
+                            - Who is this character?
+                            - What are the dreams and goals of this character?
+                            - What are the fears and worries of this character?
+                            - What is the character's personality?
+                        5. Return the information as a JSON object using double quotes for keys and values.
+                        6. Remove all styling from the JSON object and make sure it is readable and in plain text.
+                        
+                        Here is an example JSON object:
+                        {
+                            'items': ['cat', 'food bowl', 'sun', 'window'],
+                            'description': 'A drawing of a cat looking at a food bowl.', 
+                            'colors': [{'color':'black','usage':'the cat is black'}], 
+                            'character': {
+                                'fullname': 'Johnny the cat',
+                                'shortname': 'Johnny',
+                                'likes': ['tuna', 'playing with toys'],
+                                'dislikes': ['dogs', 'water'],
+                                'fears': ['dogs', 'water'],
+                                'personality': ['friendly', 'hungry'],
+                                'backstory': 'Johnny the cat loves tuna. He is always hungry and looking for food. He is a very friendly cat and loves to play with his toys.',
+                            }
+                        }
                         """,
                     }
                 ],
