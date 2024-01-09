@@ -231,7 +231,8 @@ def get_new_story():
         return jsonify({"error": "Session not found"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
+# TODO: Generate rest of the story part keys, for example trigger, image, choices, etc.
 # NOTE: Not sure if this is all the context we need and best way to do it [Isa]
 #   Currently the data sent to this function should contain:
 #   - a character, with at least the keys 'fullname' and 'backstory'
@@ -317,7 +318,11 @@ def analyze_story_parts(all_story_parts):
     llm = LLMStoryteller()
     return llm.analyze_story_parts(all_story_parts)
 
+# TODO: create function that determines which story part that should be used
 def get_best_story_part(story_part_analysis):
+    '''
+    Returns the story part that is most suitable
+    '''
     return story_part_analysis["list"][0]
 
 if __name__ == "__main__":
