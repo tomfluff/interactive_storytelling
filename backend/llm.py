@@ -164,7 +164,7 @@ class LLMStoryteller:
                         0. Understand the input character, example:
                             {
                                 "name": "Johnny the cat",
-                                "about": "A cat who loves tuna."
+                                "about": "Johnny the cat loves tuna. He is always hungry and looking for food. He is a very friendly cat and loves to play with his toys."
                             }
                         1. Understand the input premise, example:
                             {

@@ -204,6 +204,7 @@ Using [Flask](https://flask.palletsprojects.com/en/1.1.x/).
 - `send_llm_request()` sends a request to the LLM and returns the response, needs `request` item with the messages. (see example in `hello_world()` function in `llm.py`)
 - `send_vision_request()` sends a request to the Vision LLM and returns the response, needs `request` item with the content. (see example in `understand_drawing()` function in `llm.py`)
 
+
 #### LLM Examples
 
 ##### Drawing analysis
@@ -240,6 +241,57 @@ Based on [this image](https://www.123playandlearn.com/uploads/4/3/8/5/4385398/59
         "text": "above the child"
     },
     "story": "In a colorful town where every day is an adventure, there lived a joyful young hero known as Super Happy Kid. With a smile as bright as the sun and a heart full of courage, Super Happy Kid spent each day using his imagination to turn ordinary moments into extraordinary ones. Whether playing in the park or helping friends, Super Happy Kid always brought laughter and happiness to everyone around."
+}
+```
+
+#### Generate Story Part
+The function `get_story_from_context()` in `app.py` creates a new story part from a given context and returns it.\
+This function consists of three major steps:
+1. Generates story parts options from the given context, using `llm.generate_story_parts()`
+2. Analyzes the story parts using `llm.analyze_story_parts()`
+3. Determines which sttory part that is most suitable  **(TODO)**
+
+The data sent to `get_story_from_context()` should contain a `Character` a `Premise` and a `Story`, se example:
+```json
+{
+    "character": {
+        "fullname": "Johnny the cat",
+        "backstory": "Johnny the cat loves tuna. He is always hungry and looking for food. He is a very friendly cat and loves to play with his toys.",
+    },
+    "premise": {
+        "setting": {
+                "long": "Inside a house on a sunny day.",
+                "short": "Inside a house"
+        },
+        "goal": "To find the stolen tuna.",
+        "conflict": "Someone has taken the Johnny's tuna.",
+        "resolution": "The Johnny solves the mystery and finds the tuna.",
+    },
+        "story" : {
+            "parts": [
+                {
+                    "text": "Once upon a time there was a cat named Johnny. Johnny was a very friendly cat who loved to play with his toys, but most of all he loved to eat tuna.",
+                },
+                {
+                    "text": "One day when Johnny was playing with his toys, he heard a noise coming from the kitchen. He went to investigate and found that someone had stolen his tuna!",
+                }
+            ]
+        }
+}
+```
+
+The data returned by `get_story_from_context()` will be in the following format:
+```json
+{
+    "id": "story_part_id",
+    "time": "story_part_time",
+    "text": "story_part_text",
+    "analytics": {
+        "intensity": "intensity value (0-1)",
+        "emotion": "emotion, e.g. 'happy', 'sad', etc.",
+        "positioning": "positioning, e.g. 'start', 'middle', 'end', etc.",
+        "complexity": "complexity value (0-1)",
+    },
 }
 ```
 

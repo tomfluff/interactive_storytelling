@@ -232,7 +232,6 @@ def get_new_story():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# TODO: Generate rest of the story part keys, for example trigger, image, choices, etc.
 # NOTE: Not sure if this is all the context we need and best way to do it [Isa]
 #   Currently the data sent to this function should contain:
 #   - a character, with at least the keys 'fullname' and 'backstory'
@@ -246,7 +245,8 @@ def get_story_from_context():
     Should generate a story part and return it.
     """
     data = request.get_json()
-
+    llm = LLMStoryteller()
+    
     try:
         character = {
             "name": data["character"]["fullname"],
@@ -265,7 +265,7 @@ def get_story_from_context():
             "story": [part["text"] for part in data["story"]["parts"]],
         }
 
-        new_parts = generate_story_parts(context)
+        new_parts = llm.generate_story_parts(context)
         if not new_parts:
             return (
                 jsonify({"error": f"Failed to generate story parts."}),
@@ -277,16 +277,17 @@ def get_story_from_context():
             "new_parts":  new_parts["list"],
         }
 
-        story_part_analysis = analyze_story_parts(all_story_parts)
-
+        story_part_analysis = llm.analyze_story_parts(all_story_parts)
         if not story_part_analysis:
             return (
                 jsonify({"error": f"Failed to analyze story parts."}),
                 500,
             )
         
-        best_part = get_best_story_part(story_part_analysis)
+        # TODO: create function that determines which story part that should be used
+        best_part = story_part_analysis["list"][0]
 
+        # TODO: add more keys to the story part, for example trigger, image, choices, etc.
         story_part = {
             "id": uuid.uuid4(),
             "time": time.time(),
@@ -298,32 +299,11 @@ def get_story_from_context():
                 "commplexity": best_part["commplexity"],
             },
         }
-
         return jsonify(story_part), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-def generate_story_parts(context):
-    """
-    Generate story parts from the given context.
-    """
-    llm = LLMStoryteller()
-    return llm.generate_story_parts(context)
-
-def analyze_story_parts(all_story_parts):
-    """
-    Analyzes the new story parts
-    """
-    llm = LLMStoryteller()
-    return llm.analyze_story_parts(all_story_parts)
-
-# TODO: create function that determines which story part that should be used
-def get_best_story_part(story_part_analysis):
-    '''
-    Returns the story part that is most suitable
-    '''
-    return story_part_analysis["list"][0]
 
 if __name__ == "__main__":
     # Load configurations from config.yml
