@@ -231,11 +231,11 @@ def get_new_story():
         return jsonify({"error": "Session not found"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
+    
 # NOTE: Not sure if this is all the context we need and best way to do it [Isa]
 #   Currently the data sent to this function should contain:
 #   - a character, with at least the keys 'fullname' and 'backstory'
-#   - a premise, with at least the keys 'setting', 'goal', 'conflict' and 'resolution' 
+#   - a premise, with at least the keys 'setting', 'goal', 'conflict' and 'resolution'
 #   - a story, with at least the key 'parts', where each part have the key 'text'
 @app.route("/api/story", methods=["POST"])
 def get_story_from_context():
@@ -244,42 +244,81 @@ def get_story_from_context():
     Context can have the drawing, a premise, the story so far, etc.
     Should generate a story part and return it.
     """
-
     data = request.get_json()
-    
-    character = {
-        "name": data["character"]["fullname"],
-        "about": data["character"]["backstory"],
-    }
-
-    premise = {
-        "setting": data["premise"]["setting"],
-        "goal": data["premise"]["goal"],
-        "conflict": data["premise"]["conflict"],
-        "resolution": data["premise"]["resolution"],
-    }
-
-    story = {
-        "parts": [part["text"] for part in data["story"]["parts"]],
-    }
-
-    context = {
-        "character": character,
-        "premise": premise,
-        "story": story,
-    }
 
     try:
-        llm = LLMStoryteller()
-        story_part = llm.generate_story_part(context)
-        if not story_part:
+        character = {
+            "name": data["character"]["fullname"],
+            "about": data["character"]["backstory"],
+        }
+        premise = {
+            "setting": data["premise"]["setting"],
+            "goal": data["premise"]["goal"],
+            "conflict": data["premise"]["conflict"],
+            "resolution": data["premise"]["resolution"],
+        }
+
+        context = {
+            "character": character,
+            "premise": premise,
+            "story": [part["text"] for part in data["story"]["parts"]],
+        }
+
+        new_parts = generate_story_parts(context)
+        if not new_parts:
             return (
-                jsonify({"error": f"Failed to generate story part."}),
+                jsonify({"error": f"Failed to generate story parts."}),
                 500,
             )
+
+        all_story_parts = {
+            "story" : [part["text"] for part in data["story"]["parts"]],
+            "new_parts":  new_parts["list"],
+        }
+
+        story_part_analysis = analyze_story_parts(all_story_parts)
+
+        if not story_part_analysis:
+            return (
+                jsonify({"error": f"Failed to analyze story parts."}),
+                500,
+            )
+        
+        best_part = get_best_story_part(story_part_analysis)
+
+        story_part = {
+            "id": uuid.uuid4(),
+            "time": time.time(),
+            "text": best_part["text"],
+            "analytics": {
+                "intensity": best_part["intensity"],
+                "emotion": best_part["emotion"],
+                "positioning": best_part["positioning"],
+                "commplexity": best_part["commplexity"],
+            },
+        }
+
         return jsonify(story_part), 200
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+def generate_story_parts(context):
+    """
+    Generate story parts from the given context.
+    """
+    llm = LLMStoryteller()
+    return llm.generate_story_parts(context)
+
+def analyze_story_parts(all_story_parts):
+    """
+    Analyzes the new story parts
+    """
+    llm = LLMStoryteller()
+    return llm.analyze_story_parts(all_story_parts)
+
+def get_best_story_part(story_part_analysis):
+    return story_part_analysis["list"][0]
 
 if __name__ == "__main__":
     # Load configurations from config.yml

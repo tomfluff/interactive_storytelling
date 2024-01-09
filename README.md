@@ -180,7 +180,7 @@ Story is a data structure with an id and a list of story parts.
                 "intensity": "intensity value (0-1)",
                 "emotion": "emotion, e.g. 'happy', 'sad', etc.",
                 "positioning": "positioning, e.g. 'start', 'middle', 'end', etc.",
-                "commplexity": "complexity value (0-1)",
+                "complexity": "complexity value (0-1)",
             },
         }
     ]

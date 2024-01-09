@@ -76,6 +76,7 @@ class LLMStoryteller:
         # Send LLM request to analyze story parts
         story = context["story"]
         new_parts = context["new_parts"]
+
         messages = [
             {
                 "role": "system",
@@ -105,7 +106,7 @@ class LLMStoryteller:
                         5. Give each of the texts in new_parts an emotions, e.g. 'happy', 'sad', etc.
                         6. Give each of the texts in new_parts a positioning, e.g. 'start', 'middle', 'end', etc.
                         7. Give each of the texts in new_parts a complexity value between 0 and 1.
-                        8. Return the information as a JSON object.
+                        8.  Return the information as a JSON object using double quotes for keys and values.
                         9. Remove all styling from the JSON object and make sure it is readable and in plain text.
 
                         Here is an example JSON object:
@@ -177,7 +178,7 @@ class LLMStoryteller:
                                 "Once upon a time there was a cat named Johnny who loved to eat tuna.",
                             ]
                         3. Generate two different options for how the story continues, using simple and easily understandable language.
-                        4. Return the information as a JSON object.
+                        4. Return the information as a JSON object using double quotes for keys and values.
                         5. Remove all styling from the JSON object and make sure it is readable and in plain text.
                         
                         Here is an example JSON object:
