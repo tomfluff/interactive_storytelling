@@ -72,6 +72,81 @@ class LLMStoryteller:
         image_url = response.data[0].url
         return image_url
 
+    def analyze_story_parts(self, context):
+        # Send LLM request to analyze story parts
+        story = context["story"]
+        new_parts = context["new_parts"]
+        messages = [
+            {
+                "role": "system",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": """
+                        You are a helpful assistant and a great storyteller for children. Help me analyze this story.
+                        0. Understand the input story which is the story so far, example: 
+                            "story": [
+                                "Once upon a time in the vibrant city of Jubilantville, there lived a Super Happy Kid, a joyful young hero named after the infectious happiness that radiated from every fiber of their being. Their real name was a mystery, obscured by the aura of positivity that surrounded them. Super Happy Kid was known for their beaming smile, boundless energy, and an unwavering courage that inspired everyone fortunate enough to cross paths with them.",
+                                "The air in Jubilantville was tinged with excitement, as the city thrived on advanced technology, colorful skyscrapers, and an atmosphere of perpetual celebration. However, amidst the dazzling lights and joyous festivities, a subtle undercurrent of darkness began to emerge.",
+                                "Super Happy Kid, with their innate sense of optimism, became aware of a growing threat looming over Jubilantville—an evil force fueled by artificial intelligence. This menacing entity, driven by a desire to overshadow the city's jubilant spirit, had begun spreading its influence, turning once-happy citizens into mindless minions.",
+                            ]
+                        1. Understand the input new_parts, example:
+                            "new_parts": [
+                                {
+                                    "text": "As the evil force continues to spread its influence, Super Happy Kid seeks the help of the city's brightest minds and together they devise a plan to counter the AI's manipulative tactics, utilizing advanced technology and their infectious positivity to combat the growing darkness.",
+                                },
+                                {
+                                    "text": "Super Happy Kid realizes that the evil force is using advanced technology to manipulate the citizens and decides to confront the AI head-on, using their boundless energy and unwavering courage to outmatch the malevolent intelligence."
+                                }
+                            ]
+                        2. Use the story to analyze whether the texts in new_parts are a suitable continuation.
+                        3. Give each of the texts in new_parts a score between 0 and 1, where 0 is not suitable and 1 is very suitable.
+                        4. Give each of the texts in new_parts a intensity value between 0 and 10.
+                        5. Give each of the texts in new_parts an emotions, e.g. 'happy', 'sad', etc.
+                        6. Give each of the texts in new_parts a positioning, e.g. 'start', 'middle', 'end', etc.
+                        7. Give each of the texts in new_parts a complexity value between 0 and 1.
+                        8. Return the information as a JSON object.
+                        9. Remove all styling from the JSON object and make sure it is readable and in plain text.
+
+                        Here is an example JSON object:
+                        {
+                            "list": [
+                                {
+                                    "text": "As the evil force continues to spread its influence, Super Happy Kid seeks the help of the city's brightest minds and together they devise a plan to counter the AI's manipulative tactics, utilizing advanced technology and their infectious positivity to combat the growing darkness.",
+                                    "suitability": "0.9",
+                                    "intensity": "0.8",
+                                    "emotion": "determined",
+                                    "positioning": "middle",
+                                    "commplexity": "0.7",
+                                },
+                                {
+                                    "text": "Super Happy Kid realizes that the evil force is using advanced technology to manipulate the citizens and decides to confront the AI head-on, using their boundless energy and unwavering courage to outmatch the malevolent intelligence.",
+                                    "suitability": "0.85",
+                                    "intensity": "0.9",
+                                    "emotion": "courageous",
+                                    "positioning": "middle",
+                                    "commplexity": "0.8",
+                                },
+                            ]
+                        }
+                        """,
+                    }
+                ],
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": str(story),
+                        "text": str(new_parts),
+                    },
+                ],
+            },
+        ]
+        data = self.send_fast_request(messages)
+        return self.__get_json_data(data)
+
     def generate_story_parts(self, context):
         # Send LLM request to generate a story part from the given context.
         character = context["character"]
