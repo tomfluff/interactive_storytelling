@@ -74,7 +74,66 @@ class LLMStoryteller:
 
     def generate_story_parts(self, context):
         # Send LLM request to generate a story part from the given context.
-        pass
+        character = context["character"]
+        premise = context["premise"]
+        story = context["story"]
+        messages = [
+            {
+                "role": "system",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": """
+                        You are a helpful assistant and a great storyteller for children. Help me generate the next story part from this context.
+                        0. Understand the input character, example:
+                            {
+                                "name": "Johnny the cat",
+                                "about": "A cat who loves tuna."
+                            }
+                        1. Understand the input premise, example:
+                            {
+                                "setting": "Inside a house on a sunny day.",
+                                "goal": "To find the stolen tuna.",
+                                "conflict": "Someone has taken the character's tuna.",
+                                "resolution": "The character solves the mystery and finds the tuna."
+                            }
+                        2. Understand the input story, example:
+                            [
+                                "Once upon a time there was a cat named Johnny who loved to eat tuna.",
+                            ]
+                        3. Generate two different options for how the story continues, using simple and easily understandable language.
+                        4. Return the information as a JSON object.
+                        5. Remove all styling from the JSON object and make sure it is readable and in plain text.
+                        
+                        Here is an example JSON object:
+                        {
+                            "list": [
+                                {
+                                    "text": "One day when Johnny was playing with his toys, he heard a noise coming from the kitchen. He went to investigate and found that someone had stolen his tuna!"
+                                },
+                                {
+                                    "text": "One sunny day, Johnny the cat went to his usual spot in the house to find his favorite treat, tuna. But to his surprise, the tuna was missing! He knew he had to find out who took his delicious snack.
+                                },
+                            ]
+                        }
+                        """,
+                    }
+                ],
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": str(character),
+                        "text": str(premise),
+                        "text": str(story),
+                    },
+                ],
+            },
+        ]
+        data = self.send_fast_request(messages)
+        return self.__get_json_data(data)
 
     def generate_action_choices(self, story):
         # Choose an action based on the generated story
