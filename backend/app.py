@@ -167,7 +167,7 @@ def upload_and_analyze_drawing():
 
 
 @app.route("/api/premise", methods=["POST"])
-def generate_preise_options():
+def generate_premise_options():
     """
     Get the premise choices for the drawing.
     """
@@ -232,7 +232,11 @@ def get_new_story():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
+# NOTE: Not sure if this is all the context we need and best way to do it [Isa]
+#   Currently the data sent to this function should contain:
+#   - a character, with at least the keys 'fullname' and 'backstory'
+#   - a premise, with at least the keys 'setting', 'goal', 'conflict' and 'resolution' 
+#   - a story, with at least the key 'parts', where each part have the key 'text'
 @app.route("/api/story", methods=["POST"])
 def get_story_from_context():
     """
@@ -240,8 +244,42 @@ def get_story_from_context():
     Context can have the drawing, a premise, the story so far, etc.
     Should generate a story part and return it.
     """
-    pass
 
+    data = request.get_json()
+    
+    character = {
+        "name": data["character"]["fullname"],
+        "about": data["character"]["backstory"],
+    }
+
+    premise = {
+        "setting": data["premise"]["setting"],
+        "goal": data["premise"]["goal"],
+        "conflict": data["premise"]["conflict"],
+        "resolution": data["premise"]["resolution"],
+    }
+
+    story = {
+        "parts": [part["text"] for part in data["story"]["parts"]],
+    }
+
+    context = {
+        "character": character,
+        "premise": premise,
+        "story": story,
+    }
+
+    try:
+        llm = LLMStoryteller()
+        story_part = llm.generate_story_part(context)
+        if not story_part:
+            return (
+                jsonify({"error": f"Failed to generate story part."}),
+                500,
+            )
+        return jsonify(story_part), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     # Load configurations from config.yml
